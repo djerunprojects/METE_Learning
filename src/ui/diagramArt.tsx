@@ -371,6 +371,173 @@ const ashby: DiagramArt = {
   ),
 }
 
+// ---------------------------------------------------------------------------
+// Cubic unit cells (SC, BCC, FCC) in oblique projection.
+// ---------------------------------------------------------------------------
+
+function cube(ox: number, oy: number, kind: 'sc' | 'bcc' | 'fcc') {
+  const a = 70 // edge
+  const d = 28 // depth offset (up and right)
+  const P = (x: number, y: number, z: number): Pt => [ox + x * a + z * d, oy + a - y * a - z * d]
+  const corners: [number, number, number][] = []
+  for (const x of [0, 1]) for (const y of [0, 1]) for (const z of [0, 1]) corners.push([x, y, z])
+  const edges: [number, number, number][][] = [
+    [[0, 0, 0], [1, 0, 0]], [[0, 1, 0], [1, 1, 0]], [[0, 0, 1], [1, 0, 1]], [[0, 1, 1], [1, 1, 1]],
+    [[0, 0, 0], [0, 1, 0]], [[1, 0, 0], [1, 1, 0]], [[0, 0, 1], [0, 1, 1]], [[1, 0, 1], [1, 1, 1]],
+    [[0, 0, 0], [0, 0, 1]], [[1, 0, 0], [1, 0, 1]], [[0, 1, 0], [0, 1, 1]], [[1, 1, 0], [1, 1, 1]],
+  ]
+  const atoms: { p: [number, number, number]; extra: boolean }[] = corners.map((c) => ({ p: c, extra: false }))
+  if (kind === 'bcc') atoms.push({ p: [0.5, 0.5, 0.5], extra: true })
+  if (kind === 'fcc')
+    for (const f of [[0.5, 0.5, 0], [0.5, 0.5, 1], [0.5, 0, 0.5], [0.5, 1, 0.5], [0, 0.5, 0.5], [1, 0.5, 0.5]] as [number, number, number][])
+      atoms.push({ p: f, extra: true })
+  // Draw far atoms first.
+  atoms.sort((u, v) => v.p[2] - u.p[2])
+  return (
+    <g key={kind}>
+      {edges.map(([u, v], i) => {
+        const [x1, y1] = P(...u)
+        const [x2, y2] = P(...v)
+        return <line key={i} x1={x1} y1={y1} x2={x2} y2={y2} className="cell-edge" />
+      })}
+      {atoms.map(({ p, extra }, i) => {
+        const [x, y] = P(...p)
+        return <circle key={i} cx={x} cy={y} r={extra ? 7 : 6} className={extra ? 'atom is-extra' : 'atom'} />
+      })}
+    </g>
+  )
+}
+
+const unitCells: DiagramArt = {
+  viewBox: '0 0 400 200',
+  outlined: true,
+  regions: [
+    { id: 'sc', d: 'M8 22 H130 V190 H8 Z', label: [69, 16] },
+    { id: 'bcc', d: 'M138 22 H262 V190 H138 Z', label: [200, 16] },
+    { id: 'fcc', d: 'M270 22 H392 V190 H270 Z', label: [331, 16] },
+  ],
+  overlay: (
+    <>
+      {cube(22, 82, 'sc')}
+      {cube(152, 82, 'bcc')}
+      {cube(284, 82, 'fcc')}
+    </>
+  ),
+}
+
+// ---------------------------------------------------------------------------
+// Cu–Ni isomorphous phase diagram. x = 50 + 3.2·(wt% Ni); y = 30 + 0.48·(1500 − T °C)
+// ---------------------------------------------------------------------------
+
+const CU = { tCu: 229, tNi: 51.6 }
+const liquidus = `Q190 95 370 ${CU.tNi}`
+const solidus = `Q230 190 370 ${CU.tNi}`
+
+const cuNi: DiagramArt = {
+  viewBox: '0 0 400 300',
+  regions: [
+    { id: 'liquid', d: `M50 30 L370 30 L370 ${CU.tNi} Q190 95 50 ${CU.tCu} Z`, label: [200, 52] },
+    { id: 'alpha_l', d: `M50 ${CU.tCu} ${liquidus} Q230 190 50 ${CU.tCu} Z`, label: [212, 147] },
+    { id: 'alpha', d: `M50 ${CU.tCu} ${solidus} L370 270 L50 270 Z`, label: [210, 240] },
+  ],
+  overlay: (
+    <>
+      <path d={`M50 ${CU.tCu} ${liquidus}`} className="phase-line" />
+      <path d={`M50 ${CU.tCu} ${solidus}`} className="phase-line" />
+      <line x1={50} y1={270} x2={370} y2={270} className="axis" />
+      <line x1={50} y1={270} x2={50} y2={24} className="axis" />
+      <line x1={370} y1={270} x2={370} y2={24} className="axis" />
+      <text x={44} y={CU.tCu + 4} textAnchor="end" className="axis-label">
+        1085
+      </text>
+      <text x={376} y={CU.tNi + 4} className="axis-label">
+        1455
+      </text>
+      <text x={50} y={286} textAnchor="middle" className="axis-label">
+        Cu
+      </text>
+      <text x={370} y={286} textAnchor="middle" className="axis-label">
+        Ni
+      </text>
+      <text x={210} y={290} textAnchor="middle" className="axis-label">
+        Composition (wt% Ni)
+      </text>
+      <text x={14} y={150} textAnchor="middle" className="axis-label" transform="rotate(-90 14 150)">
+        Temperature (°C)
+      </text>
+    </>
+  ),
+}
+
+// ---------------------------------------------------------------------------
+// Jominy end-quench hardness curves, schematic.
+// ---------------------------------------------------------------------------
+
+const jominy: DiagramArt = {
+  viewBox: '0 0 400 270',
+  outlined: true,
+  regions: [
+    { id: 'quenched_end', d: 'M50 28 H105 V230 H50 Z', label: [78, 22] },
+    { id: 'transition', d: 'M105 28 H205 V230 H105 Z', label: [155, 22] },
+    { id: 'far_end', d: 'M205 28 H375 V230 H205 Z', label: [290, 22] },
+  ],
+  overlay: (
+    <>
+      <line x1={50} y1={230} x2={385} y2={230} className="axis" />
+      <line x1={50} y1={230} x2={50} y2={18} className="axis" />
+      <text x={385} y={252} textAnchor="end" className="axis-label">
+        Distance from quenched end →
+      </text>
+      <text x={18} y={130} textAnchor="middle" className="axis-label" transform="rotate(-90 18 130)">
+        Hardness
+      </text>
+      <path d="M55 58 L95 61 C125 68, 150 150, 205 182 C245 198, 300 203, 372 206" className="curve" />
+      <path d="M55 58 L175 63 C220 72, 250 118, 290 136 C320 147, 350 152, 372 154" className="phase-line is-dashed" />
+    </>
+  ),
+}
+
+// ---------------------------------------------------------------------------
+// S–N curves, schematic. x = 50 + 40·(log₁₀ N − 1), N = 10 … 10⁹ cycles.
+// ---------------------------------------------------------------------------
+
+const SN = { limit: 170 }
+
+const sn: DiagramArt = {
+  viewBox: '0 0 400 280',
+  outlined: true,
+  regions: [
+    { id: 'low_cycle', d: 'M50 28 H140 V250 H50 Z', label: [95, 22] },
+    { id: 'high_cycle', d: `M140 28 H375 V${SN.limit} H140 Z`, label: [258, 22] },
+    { id: 'below_limit', d: `M140 ${SN.limit} H375 V250 H140 Z`, label: [258, 215] },
+  ],
+  overlay: (
+    <>
+      <line x1={50} y1={250} x2={385} y2={250} className="axis" />
+      <line x1={50} y1={250} x2={50} y2={18} className="axis" />
+      {[1, 3, 5, 7, 9].map((e) => {
+        const x = 50 + 40 * (e - 1)
+        return (
+          <g key={e}>
+            <line x1={x} y1={250} x2={x} y2={255} className="axis" />
+            <text x={x} y={266} textAnchor="middle" className="axis-label">
+              {e === 1 ? '10' : `10${['', '', '', '³', '', '⁵', '', '⁷', '', '⁹'][e]}`}
+            </text>
+          </g>
+        )
+      })}
+      <text x={215} y={278} textAnchor="middle" className="axis-label">
+        Cycles to failure, N (log scale)
+      </text>
+      <text x={18} y={135} textAnchor="middle" className="axis-label" transform="rotate(-90 18 135)">
+        Stress amplitude, S
+      </text>
+      <path d={`M55 48 C120 58, 200 128, 270 ${SN.limit} L372 ${SN.limit}`} className="curve" />
+      <path d="M55 70 C110 84, 170 150, 250 190 C300 205, 340 212, 372 216" className="phase-line is-dashed" />
+    </>
+  ),
+}
+
 export const diagramArt: Record<DiagramId, DiagramArt> = {
   stress_strain_ductile: stressStrain,
   binary_eutectic: binaryEutectic,
@@ -379,4 +546,8 @@ export const diagramArt: Record<DiagramId, DiagramArt> = {
   aging_curve: agingCurve,
   polymer_modulus: polymerModulus,
   ashby_modulus_density: ashby,
+  unit_cells: unitCells,
+  cu_ni: cuNi,
+  jominy,
+  s_n: sn,
 }

@@ -1733,3 +1733,17 @@ button {
     align-items: stretch;
   }
 }
+
+/* Unit cell drawings */
+.cell-edge {
+  stroke: var(--muted);
+  stroke-width: 1.5;
+}
+
+.atom {
+  fill: var(--text);
+}
+
+.atom.is-extra {
+  fill: var(--accent);
+}

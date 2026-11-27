@@ -55,6 +55,7 @@ export const structureLessons: SkillLesson[] = [
           '- **FCC**: CN = 12, APF ≈ 0.74, 4 atoms per cell. Atoms touch along the **face diagonal**. Examples: Cu, Al, Ni, Ag, Au.',
           '- **HCP**: CN = 12, APF ≈ 0.74. Examples: Mg, Zn, α-titanium.',
         ],
+        diagram: 'unit_cells',
       },
       {
         title: 'Close packing and slip',

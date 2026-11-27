@@ -365,4 +365,27 @@ const feC: Question[] = [
   },
 ]
 
-export const thermodynamicsQuestions: Question[] = [...gibbs, ...phaseDiagrams, ...feC]
+const cuNiQuestions: Question[] = [
+  {
+    id: 'pd-011',
+    nodeId: 'phase-diagrams',
+    type: 'pick_region',
+    prompt: 'In the Cu–Ni system, which region is the lens-shaped two-phase field where solid and liquid coexist?',
+    diagram: 'cu_ni',
+    answer: 'alpha_l',
+    explanation:
+      'The α + L field lies between the liquidus (top) and the solidus (bottom). Inside it, a tie line gives the compositions of the solid and the liquid, and the lever rule gives their amounts.',
+  },
+  {
+    id: 'pd-012',
+    nodeId: 'phase-diagrams',
+    type: 'pick_region',
+    prompt: 'A Cu–Ni alloy of any composition is cooled well below its solidus. Which field is it in?',
+    diagram: 'cu_ni',
+    answer: 'alpha',
+    explanation:
+      'Cu and Ni are completely soluble in each other in the solid state, so below the solidus every composition is a single FCC α solid solution. There are no other solid phases.',
+  },
+]
+
+export const thermodynamicsQuestions: Question[] = [...gibbs, ...phaseDiagrams, ...feC, ...cuNiQuestions]

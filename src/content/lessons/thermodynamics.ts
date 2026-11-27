@@ -77,6 +77,8 @@ export const thermodynamicsLessons: SkillLesson[] = [
           'In a **eutectic** system, a liquid of the eutectic composition turns into **two solids at one temperature**: **L → α + β**. It melts sharply at the **lowest temperature** in the system, which is why solders are designed near eutectic compositions.',
           'Other invariant reactions: **eutectoid** (solid → two solids, e.g. γ → α + β) and **peritectic** (L + α → β).',
         ],
+        diagram: 'cu_ni',
+        highlight: 'alpha_l',
       },
     ],
     keyPoints: [

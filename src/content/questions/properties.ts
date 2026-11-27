@@ -508,4 +508,27 @@ const fatigueCreep: Question[] = [
   },
 ]
 
-export const propertiesQuestions: Question[] = [...stressStrain, ...plasticity, ...fracture, ...fatigueCreep]
+const snQuestions: Question[] = [
+  {
+    id: 'fcr-011',
+    nodeId: 'fatigue-creep',
+    type: 'pick_region',
+    prompt: 'Where on this chart would a steel part survive an essentially unlimited number of cycles?',
+    diagram: 's_n',
+    answer: 'below_limit',
+    explanation:
+      'The steel curve (solid) flattens at its fatigue (endurance) limit. Stress amplitudes below it do not cause failure however many cycles are applied. The aluminum curve (dashed) keeps falling, so it has no such limit.',
+  },
+  {
+    id: 'fcr-012',
+    nodeId: 'fatigue-creep',
+    type: 'pick_region',
+    prompt: 'Which region is low-cycle fatigue?',
+    diagram: 's_n',
+    answer: 'low_cycle',
+    explanation:
+      'At high stress amplitudes, often with some plastic strain in each cycle, failure comes after relatively few cycles (up to roughly 10³–10⁴). Most machine parts are designed for high-cycle fatigue instead.',
+  },
+]
+
+export const propertiesQuestions: Question[] = [...stressStrain, ...plasticity, ...fracture, ...fatigueCreep, ...snQuestions]

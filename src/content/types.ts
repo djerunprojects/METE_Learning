@@ -134,6 +134,10 @@ export type DiagramId =
   | 'aging_curve'
   | 'polymer_modulus'
   | 'ashby_modulus_density'
+  | 'unit_cells'
+  | 'cu_ni'
+  | 'jominy'
+  | 's_n'
 
 // ---------------------------------------------------------------------------
 // Formulas — written once in `formulas.ts` and referenced by id from questions

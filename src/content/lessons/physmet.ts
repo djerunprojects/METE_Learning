@@ -70,6 +70,7 @@ export const physmetLessons: SkillLesson[] = [
           'In a thick plain carbon bar, the core cools slowly and forms pearlite or bainite, so it stays soft. **Alloying elements** (Cr, Mo, Ni) slow the diffusional transformations, so martensite forms deeper.',
           'Hardenability is measured with the **Jominy end-quench test**: one end of a bar is water-sprayed and hardness is measured along its length.',
         ],
+        diagram: 'jominy',
       },
     ],
     keyPoints: [

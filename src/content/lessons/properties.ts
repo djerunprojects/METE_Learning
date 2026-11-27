@@ -128,6 +128,8 @@ export const propertiesLessons: SkillLesson[] = [
           'Fracture surfaces show **beach marks** (visible to the eye) and **striations** (in the SEM).',
           'Results are plotted as **S–N curves**. Many steels have an **endurance limit**; most aluminum alloys do not, so their fatigue strength is quoted at, say, 10⁷ cycles.',
         ],
+        diagram: 's_n',
+        highlight: 'below_limit',
       },
       {
         title: 'Improving fatigue life',

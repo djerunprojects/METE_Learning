@@ -505,4 +505,37 @@ const microstructure: Question[] = [
   },
 ]
 
-export const structureQuestions: Question[] = [...atomicBonding, ...crystalStructures, ...defects, ...microstructure]
+const unitCellQuestions: Question[] = [
+  {
+    id: 'cs-011',
+    nodeId: 'crystal-structures',
+    type: 'pick_region',
+    prompt: 'Which unit cell has a coordination number of 8, with atoms touching along the body diagonal?',
+    diagram: 'unit_cells',
+    answer: 'bcc',
+    explanation:
+      'In BCC, the atom at the center of the cube touches all eight corner atoms, so CN = 8 and atoms touch along the body diagonal. α-iron, chromium and tungsten are BCC.',
+  },
+  {
+    id: 'cs-012',
+    nodeId: 'crystal-structures',
+    type: 'pick_region',
+    prompt: 'Which unit cell is close-packed, with 4 atoms per cell and an APF of about 0.74?',
+    diagram: 'unit_cells',
+    answer: 'fcc',
+    explanation:
+      'FCC has atoms at the corners and the centers of all six faces: 8 × 1/8 + 6 × 1/2 = 4 atoms per cell. Atoms touch along the face diagonals, giving the maximum packing of 0.74.',
+  },
+  {
+    id: 'cs-013',
+    nodeId: 'crystal-structures',
+    type: 'pick_region',
+    prompt: 'Which unit cell has the lowest atomic packing factor (about 0.52)?',
+    diagram: 'unit_cells',
+    answer: 'sc',
+    explanation:
+      'Simple cubic has atoms only at the corners (1 atom per cell, CN = 6), which leaves a lot of empty space. Very few metals adopt it; polonium is the classic example.',
+  },
+]
+
+export const structureQuestions: Question[] = [...atomicBonding, ...crystalStructures, ...defects, ...microstructure, ...unitCellQuestions]

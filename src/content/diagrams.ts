@@ -80,4 +80,40 @@ export const diagrams: Record<DiagramId, DiagramDef> = {
       { id: 'ceramics', label: 'Technical ceramics' },
     ],
   },
+  unit_cells: {
+    id: 'unit_cells',
+    title: 'Cubic unit cells (atoms drawn small so all positions are visible)',
+    regions: [
+      { id: 'sc', label: 'Simple cubic (SC)' },
+      { id: 'bcc', label: 'Body-centered cubic (BCC)' },
+      { id: 'fcc', label: 'Face-centered cubic (FCC)' },
+    ],
+  },
+  cu_ni: {
+    id: 'cu_ni',
+    title: 'Cu–Ni phase diagram (isomorphous)',
+    regions: [
+      { id: 'liquid', label: 'L (liquid)' },
+      { id: 'alpha_l', label: 'α + L' },
+      { id: 'alpha', label: 'α (solid solution)' },
+    ],
+  },
+  jominy: {
+    id: 'jominy',
+    title: 'Jominy end-quench curves: plain carbon steel (solid) and alloy steel (dashed)',
+    regions: [
+      { id: 'quenched_end', label: 'Near the quenched end: martensite (fastest cooling)' },
+      { id: 'transition', label: 'Steep drop: martensite mixed with bainite or pearlite' },
+      { id: 'far_end', label: 'Far end: pearlite (slowest cooling)' },
+    ],
+  },
+  s_n: {
+    id: 's_n',
+    title: 'S–N curves: steel (solid, with a fatigue limit) and aluminum alloy (dashed)',
+    regions: [
+      { id: 'low_cycle', label: 'Low-cycle fatigue (high stress, few cycles)' },
+      { id: 'high_cycle', label: 'High-cycle fatigue (failure after many cycles)' },
+      { id: 'below_limit', label: 'Below the steel’s fatigue (endurance) limit' },
+    ],
+  },
 }

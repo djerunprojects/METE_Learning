@@ -507,4 +507,27 @@ const precipitation: Question[] = [
   },
 ]
 
-export const physmetQuestions: Question[] = [...strengthening, ...heatTreatment, ...nonferrous, ...precipitation]
+const jominyQuestions: Question[] = [
+  {
+    id: 'hts-011',
+    nodeId: 'heat-treatment-steels',
+    type: 'pick_region',
+    prompt: 'On the Jominy curve of the plain carbon steel (solid line), where does the bar cool fastest and become fully martensitic?',
+    diagram: 'jominy',
+    answer: 'quenched_end',
+    explanation:
+      'The water-sprayed end cools fastest, so it forms martensite and shows the maximum hardness. That hardness is set mainly by the carbon content.',
+  },
+  {
+    id: 'hts-012',
+    nodeId: 'heat-treatment-steels',
+    type: 'pick_region',
+    prompt: 'Where does the plain carbon steel’s hardness drop most steeply, as martensite gives way to bainite or pearlite?',
+    diagram: 'jominy',
+    answer: 'transition',
+    explanation:
+      'A short distance from the quenched end, the cooling rate falls below the critical rate, so less martensite forms. The alloy steel (dashed) stays hard much farther along the bar, which is what higher hardenability means.',
+  },
+]
+
+export const physmetQuestions: Question[] = [...strengthening, ...heatTreatment, ...nonferrous, ...precipitation, ...jominyQuestions]
