@@ -198,8 +198,10 @@ describe('lessons', () => {
     expect([...missing]).toEqual([])
   })
 
-  it('covers the Foundations and Core skills', () => {
-    const core = new Set(branches.filter((b) => b.layer === 'root' || b.layer === 'core').map((b) => b.id))
+  it('covers the Foundations, Core and Discipline skills', () => {
+    const core = new Set(
+      branches.filter((b) => b.layer === 'root' || b.layer === 'core' || b.layer === 'discipline').map((b) => b.id),
+    )
     const have = new Set(lessonList.map((l) => l.nodeId))
     expect(nodes.filter((n) => core.has(n.branch) && !have.has(n.id)).map((n) => n.id)).toEqual([])
   })
