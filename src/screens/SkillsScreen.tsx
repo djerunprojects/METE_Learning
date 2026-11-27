@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { branches, nodes } from '../content'
+import { branches, lessons, nodes } from '../content'
 import type { Rank } from '../content'
 import { nodesWithQuestions } from '../game/lesson'
 import { band, proficiency, relativeDay } from '../game/proficiency'
@@ -50,7 +50,15 @@ function ProficiencyBar({ value }: { value: number | null }) {
   )
 }
 
-export function SkillsScreen({ progress, onPractice }: { progress: Progress; onPractice: (nodeId: string) => void }) {
+export function SkillsScreen({
+  progress,
+  onPractice,
+  onRead,
+}: {
+  progress: Progress
+  onPractice: (nodeId: string) => void
+  onRead: (nodeId: string) => void
+}) {
   const [sort, setSort] = useState<Sort>(initialSort)
 
   const chooseSort = (s: Sort) => {
@@ -164,6 +172,12 @@ export function SkillsScreen({ progress, onPractice }: { progress: Progress; onP
               <div className="skill-prof">
                 <ProficiencyBar value={s.prof} />
               </div>
+              <div className="skill-actions">
+                {lessons[s.node.id] && (
+                  <button type="button" className="link-button" onClick={() => onRead(s.node.id)}>
+                    Lesson
+                  </button>
+                )}
               <button
                 type="button"
                 className="secondary skill-practice"
@@ -174,6 +188,7 @@ export function SkillsScreen({ progress, onPractice }: { progress: Progress; onP
                 Practice
                 {!withContent.has(s.node.id) && <span className="sr-only"> (lessons coming soon)</span>}
               </button>
+              </div>
             </li>
           ))}
         </ul>

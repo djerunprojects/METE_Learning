@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react'
-import { branches, nodes } from '../content'
+import { branches, lessons, nodes } from '../content'
 import type { Branch, Layer, Rank, SkillNode } from '../content'
 import { nodesWithQuestions } from '../game/lesson'
 import { nodeStatus, requirements } from '../game/unlock'
@@ -109,11 +109,13 @@ export function TreeScreen({
   progress,
   saveFailed,
   onStart,
+  onRead,
   onImport,
 }: {
   progress: Progress
   saveFailed: boolean
   onStart: (nodeId: string) => void
+  onRead: (nodeId: string) => void
   onImport: (json: string) => string | null
 }) {
   const [openId, setOpenId] = useState<string | null>(null)
@@ -215,6 +217,7 @@ export function TreeScreen({
           hasContent={withContent.has(open.id)}
           onClose={() => setOpenId(null)}
           onStart={() => onStart(open.id)}
+          onRead={lessons[open.id] ? () => onRead(open.id) : undefined}
         />
       )}
     </>

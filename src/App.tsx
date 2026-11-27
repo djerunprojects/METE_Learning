@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { nodes } from './content'
+import { lessons, nodes } from './content'
 import type { Question } from './content'
 import { buildLesson } from './game/lesson'
 import { levelInfo } from './game/levels'
@@ -8,6 +8,7 @@ import type { Progress } from './game/progress'
 import { lessonOutcome } from './game/scoring'
 import type { LessonOutcome } from './game/scoring'
 import { Lesson } from './screens/Lesson'
+import { LessonReader } from './screens/LessonReader'
 import { Results } from './screens/Results'
 import { SkillsScreen } from './screens/SkillsScreen'
 import { TreeScreen } from './screens/TreeScreen'
@@ -17,6 +18,8 @@ import type { Tab } from './ui/PlayerBar'
 type Screen =
   | { name: 'home' }
   | { name: 'lesson'; nodeId: string; questions: Question[]; run: number }
+  /** Reading a skill's lesson cards. `thenPractice`: continue into the questions afterwards. */
+  | { name: 'learn'; nodeId: string; thenPractice: boolean }
   | { name: 'results'; nodeId: string; outcome: LessonOutcome; levelBefore: number; levelAfter: number }
 
 let runCounter = 0
@@ -44,11 +47,36 @@ function App() {
     window.scrollTo(0, 0)
   }
 
+  const practice = (nodeId: string) =>
+    setScreen({ name: 'lesson', nodeId, questions: buildLesson(nodeId), run: ++runCounter })
+
+  /** First time on a skill: read the lesson, then practice. Afterwards: straight to practice. */
   const start = (nodeId: string) => {
     if (screen.name === 'home') homeScroll.current = window.scrollY
-    setScreen({ name: 'lesson', nodeId, questions: buildLesson(nodeId), run: ++runCounter })
+    const firstTime = (progress.ranks[nodeId] ?? 0) === 0 && !progress.lastPlayed[nodeId]
+    if (firstTime && lessons[nodeId]) setScreen({ name: 'learn', nodeId, thenPractice: true })
+    else practice(nodeId)
+  }
+
+  const read = (nodeId: string) => {
+    if (screen.name === 'home') homeScroll.current = window.scrollY
+    setScreen({ name: 'learn', nodeId, thenPractice: false })
   }
   const toHome = () => setScreen({ name: 'home' })
+
+  if (screen.name === 'learn') {
+    const node = nodes.find((n) => n.id === screen.nodeId)!
+    return (
+      <LessonReader
+        key={node.id}
+        node={node}
+        lesson={lessons[node.id]}
+        finishLabel={screen.thenPractice ? 'Start practice' : 'Done'}
+        onFinish={() => (screen.thenPractice ? practice(node.id) : toHome())}
+        onQuit={toHome}
+      />
+    )
+  }
 
   if (screen.name === 'lesson') {
     const node = nodes.find((n) => n.id === screen.nodeId)!
@@ -82,7 +110,7 @@ function App() {
         node={node}
         outcome={screen.outcome}
         levelUp={screen.levelAfter > screen.levelBefore ? screen.levelAfter : null}
-        onRetry={() => start(node.id)}
+        onRetry={() => practice(node.id)}
         onHome={toHome}
         homeLabel={tab === 'tree' ? 'Back to tree' : 'Back to my skills'}
       />
@@ -97,6 +125,7 @@ function App() {
           progress={progress}
           saveFailed={saveFailed}
           onStart={start}
+          onRead={read}
           onImport={(json) => {
             try {
               updateProgress(parseProgress(json))
@@ -107,7 +136,7 @@ function App() {
           }}
         />
       ) : (
-        <SkillsScreen progress={progress} onPractice={start} />
+        <SkillsScreen progress={progress} onPractice={start} onRead={read} />
       )}
     </>
   )

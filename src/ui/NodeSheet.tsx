@@ -19,12 +19,15 @@ export function NodeSheet({
   ranks,
   hasContent,
   onStart,
+  onRead,
   onClose,
 }: {
   node: SkillNode
   ranks: Ranks
   hasContent: boolean
   onStart: () => void
+  /** Present when the skill has lesson cards. */
+  onRead?: () => void
   onClose: () => void
 }) {
   const ref = useRef<HTMLDivElement>(null)
@@ -40,7 +43,7 @@ export function NodeSheet({
     return () => document.removeEventListener('keydown', onKey)
   }, [onClose])
 
-  const action = rank === 0 ? 'Start lesson' : rank === 1 ? 'Replay to master' : 'Practice'
+  const action = rank === 0 ? 'Start' : rank === 1 ? 'Replay to master' : 'Practice'
 
   return (
     <div className="sheet-backdrop" onClick={onClose}>
@@ -107,6 +110,11 @@ export function NodeSheet({
           ) : (
             <button type="button" className="primary" onClick={onStart}>
               {action}
+            </button>
+          )}
+          {onRead && status !== 'locked' && (
+            <button type="button" className="secondary" onClick={onRead}>
+              Read lesson
             </button>
           )}
         </div>

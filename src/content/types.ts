@@ -153,3 +153,30 @@ export interface FormulaDef {
   expression: string
   symbols: FormulaSymbol[]
 }
+
+// ---------------------------------------------------------------------------
+// Lessons — short reading cards shown before a skill's questions
+// ---------------------------------------------------------------------------
+
+export interface LessonCard {
+  title: string
+  /**
+   * Paragraphs, one string each. Wrap key terms in **double asterisks** to highlight them.
+   * Consecutive entries starting with "- " are shown as a bullet list.
+   */
+  body: string[]
+  /** Optional formula id from `formulas.ts`, shown with hover/tap tooltips. */
+  formula?: string
+  /** Optional diagram, shown with all regions labelled. */
+  diagram?: DiagramId
+  /** Region of `diagram` to highlight. */
+  highlight?: string
+}
+
+export interface SkillLesson {
+  nodeId: string
+  /** 3–5 teaching cards. */
+  cards: LessonCard[]
+  /** Summary shown on the final card. */
+  keyPoints: string[]
+}

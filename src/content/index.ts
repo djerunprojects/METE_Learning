@@ -20,6 +20,7 @@ import { failureQuestions } from './questions/failure'
 import { selectionQuestions } from './questions/selection'
 
 export { branches, nodes } from './tree'
+export { lessons, lessonList } from './lessons'
 export { diagrams } from './diagrams'
 export { formulas, parseExpression } from './formulas'
 export { glossary, splitAcronyms, findCapsTokens } from './glossary'

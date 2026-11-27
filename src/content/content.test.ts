@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { branches, diagrams, findCapsTokens, formulas, glossary, nodes, parseExpression, questions } from './index'
+import { branches, diagrams, findCapsTokens, formulas, glossary, lessonList, nodes, parseExpression, questions } from './index'
 import type { Question, SkillNode } from './types'
 
 // Integrity checks for the content data. Run with `npm test`.
@@ -156,5 +156,51 @@ describe('coverage', () => {
     const withQuestions = new Set(questions.map((q) => q.nodeId))
     const missing = nodes.filter((n) => !withQuestions.has(n.id)).map((n) => n.id)
     expect(missing).toEqual([])
+  })
+})
+
+describe('lessons', () => {
+  it('belong to existing skills, with 3–5 cards and key points', () => {
+    for (const l of lessonList) {
+      expect(nodeIds, l.nodeId).toContain(l.nodeId)
+      expect(l.cards.length, l.nodeId).toBeGreaterThanOrEqual(3)
+      expect(l.cards.length, l.nodeId).toBeLessThanOrEqual(5)
+      expect(l.keyPoints.length, l.nodeId).toBeGreaterThanOrEqual(3)
+    }
+    expect(new Set(lessonList.map((l) => l.nodeId)).size).toBe(lessonList.length)
+  })
+
+  it('reference existing formulas, diagrams and regions', () => {
+    for (const l of lessonList)
+      for (const c of l.cards) {
+        if (c.formula) expect(Object.keys(formulas), `${l.nodeId}: ${c.title}`).toContain(c.formula)
+        if (c.diagram) {
+          expect(Object.keys(diagrams), `${l.nodeId}: ${c.title}`).toContain(c.diagram)
+          if (c.highlight)
+            expect(diagrams[c.diagram].regions.map((r) => r.id), `${l.nodeId}: ${c.title}`).toContain(c.highlight)
+        }
+        expect(c.highlight && !c.diagram, `${l.nodeId}: highlight without diagram`).toBeFalsy()
+      }
+  })
+
+  it('has balanced **bold** markers and no empty paragraphs', () => {
+    for (const l of lessonList)
+      for (const c of l.cards)
+        for (const p of c.body) {
+          expect((p.match(/\*\*/g) ?? []).length % 2, `${l.nodeId}: ${p}`).toBe(0)
+          expect(p.trim().length, `${l.nodeId}: ${c.title}`).toBeGreaterThan(0)
+        }
+  })
+
+  it('defines every acronym used in lessons', () => {
+    const texts = lessonList.flatMap((l) => [...l.keyPoints, ...l.cards.flatMap((c) => [c.title, ...c.body])])
+    const missing = new Set(texts.map((t) => t.replace(/\*\*/g, '')).flatMap(findCapsTokens).filter((t) => !(t in glossary)))
+    expect([...missing]).toEqual([])
+  })
+
+  it('covers the Foundations and Core skills', () => {
+    const core = new Set(branches.filter((b) => b.layer === 'root' || b.layer === 'core').map((b) => b.id))
+    const have = new Set(lessonList.map((l) => l.nodeId))
+    expect(nodes.filter((n) => core.has(n.branch) && !have.has(n.id)).map((n) => n.id)).toEqual([])
   })
 })
