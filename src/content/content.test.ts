@@ -152,12 +152,9 @@ describe('coverage', () => {
     expect(short).toEqual([])
   })
 
-  it('covers the Core and Discipline layers', () => {
-    const coreBranches = new Set(
-      branches.filter((b) => b.layer === 'core' || b.layer === 'root' || b.layer === 'discipline').map((b) => b.id),
-    )
+  it('gives every skill in the tree some questions', () => {
     const withQuestions = new Set(questions.map((q) => q.nodeId))
-    const missing = nodes.filter((n) => coreBranches.has(n.branch) && !withQuestions.has(n.id)).map((n) => n.id)
+    const missing = nodes.filter((n) => !withQuestions.has(n.id)).map((n) => n.id)
     expect(missing).toEqual([])
   })
 })

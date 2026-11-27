@@ -308,6 +308,69 @@ const polymerModulus: DiagramArt = {
   ),
 }
 
+// ---------------------------------------------------------------------------
+// Ashby chart, Young's modulus vs density (log–log), simplified family envelopes.
+// x = 60 + 88·(log₁₀ ρ + 2), ρ in Mg/m³; y = 262 − 38·(log₁₀ E + 3), E in GPa.
+// ---------------------------------------------------------------------------
+
+const ashby: DiagramArt = {
+  viewBox: '0 0 400 300',
+  outlined: true,
+  regions: [
+    { id: 'foams', d: 'M86.5 205.0 a65.0 57.0 0 1 0 130.0 0 a65.0 57.0 0 1 0 -130.0 0 Z', label: [151, 210] },
+    { id: 'elastomers', d: 'M232.0 224.0 a9.8 38.0 0 1 0 19.5 0 a9.8 38.0 0 1 0 -19.5 0 Z', label: [242, 229] },
+    { id: 'polymers', d: 'M232.0 148.0 a17.1 26.6 0 1 0 34.2 0 a17.1 26.6 0 1 0 -34.2 0 Z', label: [249, 153] },
+    { id: 'woods', d: 'M190.0 123.3 a23.0 24.7 0 1 0 46.0 0 a23.0 24.7 0 1 0 -46.0 0 Z', label: [213, 128] },
+    { id: 'composites', d: 'M246.0 80.1 a10.9 23.2 0 1 0 21.8 0 a10.9 23.2 0 1 0 -21.8 0 Z', label: [241, 85] },
+    { id: 'metals', d: 'M256.3 67.9 a47.1 19.2 0 1 0 94.2 0 a47.1 19.2 0 1 0 -94.2 0 Z', label: [333, 73] },
+    { id: 'ceramics', d: 'M266.1 55.9 a37.9 21.9 0 1 0 75.8 0 a37.9 21.9 0 1 0 -75.8 0 Z', label: [294, 44] },
+  ],
+  overlay: (
+    <>
+      <line x1={60} y1={262} x2={385} y2={262} className="axis" />
+      <line x1={60} y1={262} x2={60} y2={20} className="axis" />
+      <line x1={60.0} y1={262} x2={60.0} y2={267} className="axis" />
+      <text x={60.0} y={278} textAnchor="middle" className="axis-label">
+        0.01
+      </text>
+      <line x1={148.0} y1={262} x2={148.0} y2={267} className="axis" />
+      <text x={148.0} y={278} textAnchor="middle" className="axis-label">
+        0.1
+      </text>
+      <line x1={236.0} y1={262} x2={236.0} y2={267} className="axis" />
+      <text x={236.0} y={278} textAnchor="middle" className="axis-label">
+        1
+      </text>
+      <line x1={324.0} y1={262} x2={324.0} y2={267} className="axis" />
+      <text x={324.0} y={278} textAnchor="middle" className="axis-label">
+        10
+      </text>
+      <text x={54} y={266.0} textAnchor="end" className="axis-label">
+        0.001
+      </text>
+      <text x={54} y={190.0} textAnchor="end" className="axis-label">
+        0.1
+      </text>
+      <text x={54} y={114.0} textAnchor="end" className="axis-label">
+        10
+      </text>
+      <text x={54} y={38.0} textAnchor="end" className="axis-label">
+        1000
+      </text>
+      <path d="M60.0 186.0 L366.0 53.9" className="phase-line is-dotted" />
+      <text x={70} y={124} textAnchor="start" className="diagram-note is-small">
+        E/ρ = const (dotted)
+      </text>
+      <text x={220} y={296} textAnchor="middle" className="axis-label">
+        Density (Mg/m³, log scale)
+      </text>
+      <text x={14} y={140} textAnchor="middle" className="axis-label" transform="rotate(-90 14 140)">
+        Young’s modulus (GPa, log scale)
+      </text>
+    </>
+  ),
+}
+
 export const diagramArt: Record<DiagramId, DiagramArt> = {
   stress_strain_ductile: stressStrain,
   binary_eutectic: binaryEutectic,
@@ -315,4 +378,5 @@ export const diagramArt: Record<DiagramId, DiagramArt> = {
   ttt_eutectoid: ttt,
   aging_curve: agingCurve,
   polymer_modulus: polymerModulus,
+  ashby_modulus_density: ashby,
 }

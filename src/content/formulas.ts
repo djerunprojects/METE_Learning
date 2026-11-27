@@ -346,6 +346,58 @@ export const formulas: Record<string, FormulaDef> = {
       { symbol: 'V_metal', name: 'Volume of metal consumed to form it', unit: 'cm³' },
     ],
   },
+  'larson-miller': {
+    id: 'larson-miller',
+    name: 'Larson–Miller parameter (creep rupture)',
+    expression: '{P_LM} = {T} ({C} + log {t_r})',
+    symbols: [
+      { symbol: 'P_LM', name: 'Larson–Miller parameter: one value links temperature and rupture life' },
+      { symbol: 'T', name: 'Absolute temperature', unit: 'K' },
+      { symbol: 'C', name: 'Material constant, often about 20' },
+      { symbol: 't_r', name: 'Time to rupture', unit: 'h' },
+    ],
+  },
+  'paris-law': {
+    id: 'paris-law',
+    name: 'Paris law (fatigue crack growth)',
+    expression: '{da/dN} = {A} ({ΔK})^{m}',
+    symbols: [
+      { symbol: 'da/dN', name: 'Crack growth per load cycle', unit: 'm/cycle' },
+      { symbol: 'A', name: 'Material constant' },
+      { symbol: 'ΔK', name: 'Stress intensity range in each cycle (grows with stress range and crack length)', unit: 'MPa·√m' },
+      { symbol: 'm', name: 'Paris exponent, typically 2 to 4 for metals' },
+    ],
+  },
+  'index-tie': {
+    id: 'index-tie',
+    name: 'Performance index: light, stiff tie (tension member)',
+    expression: '{M_t} = {E} / {ρ}',
+    symbols: [
+      { symbol: 'M_t', name: 'Material index to maximize (specific stiffness)' },
+      { symbol: 'E', name: "Young's modulus", unit: 'GPa' },
+      { symbol: 'ρ', name: 'Density', unit: 'Mg/m³' },
+    ],
+  },
+  'index-beam': {
+    id: 'index-beam',
+    name: 'Performance index: light, stiff beam in bending',
+    expression: '{M_b} = √{E} / {ρ}',
+    symbols: [
+      { symbol: 'M_b', name: 'Material index to maximize' },
+      { symbol: 'E', name: "Young's modulus", unit: 'GPa' },
+      { symbol: 'ρ', name: 'Density', unit: 'Mg/m³' },
+    ],
+  },
+  'index-panel': {
+    id: 'index-panel',
+    name: 'Performance index: light, stiff panel (plate) in bending',
+    expression: '{M_p} = ∛{E} / {ρ}',
+    symbols: [
+      { symbol: 'M_p', name: 'Material index to maximize' },
+      { symbol: 'E', name: "Young's modulus", unit: 'GPa' },
+      { symbol: 'ρ', name: 'Density', unit: 'Mg/m³' },
+    ],
+  },
 }
 
 export interface ExprToken {

@@ -13,6 +13,11 @@ import { polymersQuestions } from './questions/polymers'
 import { compositesQuestions } from './questions/composites'
 import { corrosionQuestions } from './questions/corrosion'
 import { functionalQuestions } from './questions/functional'
+import { bioQuestions } from './questions/bio'
+import { aeroQuestions } from './questions/aero'
+import { energyQuestions } from './questions/energy'
+import { failureQuestions } from './questions/failure'
+import { selectionQuestions } from './questions/selection'
 
 export { branches, nodes } from './tree'
 export { diagrams } from './diagrams'
@@ -36,4 +41,9 @@ export const questions: Question[] = [
   ...compositesQuestions,
   ...corrosionQuestions,
   ...functionalQuestions,
+  ...bioQuestions,
+  ...aeroQuestions,
+  ...energyQuestions,
+  ...failureQuestions,
+  ...selectionQuestions,
 ]

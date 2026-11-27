@@ -133,6 +133,7 @@ export type DiagramId =
   | 'ttt_eutectoid'
   | 'aging_curve'
   | 'polymer_modulus'
+  | 'ashby_modulus_density'
 
 // ---------------------------------------------------------------------------
 // Formulas — written once in `formulas.ts` and referenced by id from questions

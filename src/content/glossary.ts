@@ -26,6 +26,8 @@ export const glossary: Record<string, string> = {
   UTS: 'Ultimate Tensile Strength',
   DBTT: 'Ductile-to-Brittle Transition Temperature',
   SCC: 'Stress Corrosion Cracking',
+  NDT: 'Non-Destructive Testing',
+  LCA: 'Life Cycle Assessment',
 
   // Kinetics and heat treatment
   TTT: 'Time–Temperature–Transformation',
@@ -53,6 +55,11 @@ export const glossary: Record<string, string> = {
   // Polymers and biomaterials
   PE: 'Polyethylene',
   HDPE: 'High-Density Polyethylene',
+  UHMWPE: 'Ultra-High-Molecular-Weight Polyethylene',
+  PCL: 'Polycaprolactone',
+  PLGA: 'Poly(lactic-co-glycolic acid)',
+  ECM: 'Extracellular Matrix',
+  RGD: 'Arginine–Glycine–Aspartic acid (cell-binding peptide)',
   LDPE: 'Low-Density Polyethylene',
   PP: 'Polypropylene',
   PVC: 'Polyvinyl Chloride',
@@ -67,6 +74,14 @@ export const glossary: Record<string, string> = {
   TBC: 'Thermal Barrier Coating',
   EBC: 'Environmental Barrier Coating',
   YSZ: 'Yttria-Stabilized Zirconia',
+  TGO: 'Thermally Grown Oxide',
+  CMAS: 'Calcium–Magnesium–Alumino-Silicate (molten sand and ash deposits)',
+  RCC: 'Reinforced Carbon–Carbon',
+  PICA: 'Phenolic-Impregnated Carbon Ablator',
+  ODS: 'Oxide-Dispersion-Strengthened',
+  LFP: 'Lithium Iron Phosphate (LiFePO₄)',
+  NMC: 'Lithium Nickel Manganese Cobalt Oxide',
+  SEI: 'Solid Electrolyte Interphase',
   SOFC: 'Solid Oxide Fuel Cell',
   PEMFC: 'Proton-Exchange Membrane Fuel Cell',
   PV: 'Photovoltaic',
@@ -98,16 +113,16 @@ export function splitAcronyms(text: string): TextSegment[] {
   return out
 }
 
-/** All-caps words that are chemical formulas, not acronyms (no tooltip, not checked). */
-export const CHEMICAL_FORMULAS = new Set(['CO', 'WC', 'NO', 'HF', 'BN'])
+/** All-caps words that are chemical formulas or units, not acronyms (no tooltip, not checked). */
+export const NON_ACRONYMS = new Set(['CO', 'WC', 'NO', 'HF', 'BN', 'OH', 'MJ'])
 
 /**
  * Finds every all-caps token (2+ letters, optional plural "s") that should be in the glossary.
  * Used by the content tests. Chemical formulas are skipped: tokens followed by a subscript
- * number (SO₂, CO₂) and the ones listed in CHEMICAL_FORMULAS.
+ * number (SO₂, CO₂) and the ones listed in NON_ACRONYMS.
  */
 export function findCapsTokens(text: string): string[] {
   return [...text.matchAll(/(?<![A-Za-z0-9])([A-Z]{2,})s?(?![A-Za-z0-9₀-₉])/g)]
     .map((m) => m[1])
-    .filter((t) => !CHEMICAL_FORMULAS.has(t))
+    .filter((t) => !NON_ACRONYMS.has(t))
 }

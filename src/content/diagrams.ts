@@ -67,4 +67,17 @@ export const diagrams: Record<DiagramId, DiagramDef> = {
       { id: 'viscous', label: 'Viscous flow' },
     ],
   },
+  ashby_modulus_density: {
+    id: 'ashby_modulus_density',
+    title: 'Material property chart: Young’s modulus vs density (log–log, simplified)',
+    regions: [
+      { id: 'foams', label: 'Foams' },
+      { id: 'elastomers', label: 'Elastomers' },
+      { id: 'polymers', label: 'Polymers' },
+      { id: 'woods', label: 'Woods (along the grain)' },
+      { id: 'composites', label: 'Composites (CFRP, GFRP)' },
+      { id: 'metals', label: 'Metals and alloys' },
+      { id: 'ceramics', label: 'Technical ceramics' },
+    ],
+  },
 }
