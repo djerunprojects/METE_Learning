@@ -143,3 +143,19 @@ describe('glossary', () => {
     expect([...missing]).toEqual([])
   })
 })
+
+describe('coverage', () => {
+  it('gives every skill with content at least 10 questions', () => {
+    const counts = new Map<string, number>()
+    for (const q of questions) counts.set(q.nodeId, (counts.get(q.nodeId) ?? 0) + 1)
+    const short = [...counts].filter(([, n]) => n < 10)
+    expect(short).toEqual([])
+  })
+
+  it('covers the whole Core layer', () => {
+    const coreBranches = new Set(branches.filter((b) => b.layer === 'core' || b.layer === 'root').map((b) => b.id))
+    const withQuestions = new Set(questions.map((q) => q.nodeId))
+    const missing = nodes.filter((n) => coreBranches.has(n.branch) && !withQuestions.has(n.id)).map((n) => n.id)
+    expect(missing).toEqual([])
+  })
+})

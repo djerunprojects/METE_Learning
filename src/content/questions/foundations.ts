@@ -1,6 +1,6 @@
 import type { Question } from '../types'
 
-// Sample questions (step 1).
+// Foundations · Classes of Materials. Sources: Callister & Rethwisch ch. 1; Askeland ch. 1.
 // Draft content: to be reviewed for accuracy.
 export const classesOfMaterialsQuestions: Question[] = [
   {
@@ -78,5 +78,54 @@ export const classesOfMaterialsQuestions: Question[] = [
     answer: 0,
     explanation:
       'The stiff, strong fibers carry most of the load. The polymer matrix holds the fibers in place, transfers load between them and protects them.',
+  },
+  {
+    id: 'com-007',
+    nodeId: 'classes-of-materials',
+    type: 'multiple_choice',
+    prompt: 'Which class of materials typically has the lowest density?',
+    options: ['Metals', 'Ceramics', 'Polymers'],
+    answer: 2,
+    explanation:
+      'Polymers are built from light atoms (mostly C and H) in loosely packed chains, so most have densities of about 0.9–2 g/cm³. Ceramics are typically 2–6 g/cm³ and common metals 2.7 (Al) to 7.9 (steel) g/cm³ or more.',
+  },
+  {
+    id: 'com-008',
+    nodeId: 'classes-of-materials',
+    type: 'true_false',
+    prompt: 'Ceramics are generally good electrical and thermal insulators.',
+    answer: true,
+    explanation:
+      'With electrons tightly held in ionic and covalent bonds, most ceramics have few free charge carriers, which is why alumina and glass are used as insulators. There are exceptions, such as semiconducting silicon carbide and highly heat-conducting diamond.',
+  },
+  {
+    id: 'com-009',
+    nodeId: 'classes-of-materials',
+    type: 'cause_effect',
+    prompt: 'Select every statement that is correct.',
+    scenario: 'A lining must survive 1400 °C in an oxidizing furnace atmosphere for months.',
+    options: [
+      'A ceramic such as alumina is a good choice because of its very high melting point',
+      'An oxide ceramic is a good choice because it is already oxidized and chemically stable in air',
+      'A ceramic is a good choice because ceramics are very ductile',
+      'A common polymer would be a good choice because polymers resist heat well',
+    ],
+    answers: [0, 1],
+    explanation:
+      'Alumina melts above 2000 °C and, being an oxide, does not oxidize further. Ceramics are brittle rather than ductile, and common polymers soften or decompose at a few hundred °C at most.',
+  },
+  {
+    id: 'com-010',
+    nodeId: 'classes-of-materials',
+    type: 'matching',
+    prompt: 'Match each material to a typical application.',
+    pairs: [
+      { left: 'Copper', right: 'Electrical wiring' },
+      { left: 'Silicon carbide', right: 'Abrasives and grinding wheels' },
+      { left: 'Polycarbonate', right: 'Shatter-resistant safety glasses' },
+      { left: 'GFRP', right: 'Boat hulls' },
+    ],
+    explanation:
+      'Copper combines high electrical conductivity with ductility. Silicon carbide is extremely hard. Polycarbonate is a transparent, tough polymer. Glass-fiber reinforced polymer is light, stiff and does not corrode in water.',
   },
 ]

@@ -9,6 +9,7 @@ export const glossary: Record<string, string> = {
   HCP: 'Hexagonal Close-Packed',
   APF: 'Atomic Packing Factor',
   CN: 'Coordination Number',
+  BCT: 'Body-Centered Tetragonal',
 
   // Characterization
   SEM: 'Scanning Electron Microscope',
@@ -16,6 +17,10 @@ export const glossary: Record<string, string> = {
   XRD: 'X-Ray Diffraction',
   EDS: 'Energy-Dispersive X-ray Spectroscopy',
   DSC: 'Differential Scanning Calorimetry',
+  SE: 'Secondary Electrons',
+  BSE: 'Backscattered Electrons',
+  EBSD: 'Electron Backscatter Diffraction',
+  NA: 'Numerical Aperture',
 
   // Properties and failure
   UTS: 'Ultimate Tensile Strength',
@@ -43,6 +48,7 @@ export const glossary: Record<string, string> = {
 
   // Polymers and biomaterials
   PE: 'Polyethylene',
+  HDPE: 'High-Density Polyethylene',
   PP: 'Polypropylene',
   PVC: 'Polyvinyl Chloride',
   PET: 'Polyethylene Terephthalate',

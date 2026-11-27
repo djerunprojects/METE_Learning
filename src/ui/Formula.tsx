@@ -61,8 +61,10 @@ export function Formula({ id }: { id: string }) {
       }}
     >
       <div className="formula-expr">
-        {tokens.map((t, i) =>
-          t.symbol ? (
+        {tokens.map((t, i) => {
+          const sup = i > 0 && tokens[i - 1].text.endsWith('^')
+          const text = t.symbol ? t.text : t.text.replace(/\^$/, '')
+          return t.symbol ? (
             <span
               key={i}
               className={`formula-sym${active?.kind === 'symbol' && active.symbol === t.symbol ? ' is-active' : ''}`}
@@ -78,12 +80,18 @@ export function Formula({ id }: { id: string }) {
                 setActive((a) => (a?.kind === 'symbol' && a.symbol === t.symbol ? null : { kind: 'symbol', symbol: t.symbol!, el }))
               }}
             >
-              <Sym symbol={t.symbol} />
+              {sup ? (
+                <sup>
+                  <Sym symbol={t.symbol} />
+                </sup>
+              ) : (
+                <Sym symbol={t.symbol} />
+              )}
             </span>
           ) : (
-            <span key={i}>{t.text}</span>
-          ),
-        )}
+            <span key={i}>{text}</span>
+          )
+        })}
       </div>
       <div className="formula-hint">Hover or tap for details</div>
 

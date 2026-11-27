@@ -12,7 +12,7 @@ import type {
 import { shuffle } from '../game/lesson'
 import type { Response } from '../game/lesson'
 import { InsideControl, RichText } from './RichText'
-import { StressStrainDiagram } from './StressStrainDiagram'
+import { RegionDiagram } from './RegionDiagram'
 
 export interface QuestionProps<Q extends Question = Question> {
   question: Q
@@ -268,16 +268,13 @@ function Matching({ question: q, onChange, checked }: QuestionProps<MatchingQues
 }
 
 function PickRegion({ question: q, response, onChange, checked }: QuestionProps<PickRegionQuestion>) {
-  const selected = response?.kind === 'region' ? response.id : null
-  switch (q.diagram) {
-    case 'stress_strain_ductile':
-      return (
-        <StressStrainDiagram
-          selected={selected}
-          onSelect={(id) => onChange({ kind: 'region', id })}
-          checked={checked}
-          answer={q.answer}
-        />
-      )
-  }
+  return (
+    <RegionDiagram
+      diagram={q.diagram}
+      selected={response?.kind === 'region' ? response.id : null}
+      onSelect={(id) => onChange({ kind: 'region', id })}
+      checked={checked}
+      answer={q.answer}
+    />
+  )
 }

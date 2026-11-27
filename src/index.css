@@ -1255,64 +1255,130 @@ button {
   pointer-events: none;
 }
 
-.region {
+.region-shape {
+  fill: var(--primary);
+  fill-opacity: 0.035;
   cursor: pointer;
+  transition: fill-opacity 0.12s ease;
 }
 
-.region rect,
-.region circle {
-  fill: var(--primary);
+.is-outlined .region-shape {
   fill-opacity: 0.06;
   stroke: var(--primary);
   stroke-opacity: 0.25;
   stroke-dasharray: 4 3;
-  transition: fill-opacity 0.12s ease;
 }
 
-.region:hover rect,
-.region:hover circle {
-  fill-opacity: 0.14;
+.region-shape:hover {
+  fill-opacity: 0.12;
 }
 
-.region.is-selected rect,
-.region.is-selected circle {
+.region-shape.is-selected {
   fill-opacity: 0.25;
-  stroke-opacity: 1;
-  stroke-dasharray: none;
 }
 
-.region.is-correct rect,
-.region.is-correct circle {
+.region-shape.is-correct {
+  fill: var(--good);
+  fill-opacity: 0.3;
+}
+
+.region-shape.is-wrong {
+  fill: var(--bad);
+  fill-opacity: 0.3;
+}
+
+.diagram-overlay {
+  pointer-events: none;
+}
+
+.phase-line {
+  fill: none;
+  stroke: var(--text);
+  stroke-width: 2;
+  stroke-linejoin: round;
+}
+
+.phase-line.is-dashed {
+  stroke-dasharray: 5 4;
+  stroke-width: 1.5;
+  stroke: var(--muted);
+}
+
+.phase-line.is-dotted {
+  stroke-dasharray: 1.5 4;
+  stroke-linecap: round;
+  stroke-width: 1.5;
+  stroke: var(--muted);
+}
+
+.diagram-note.is-small {
+  font-size: 10px;
+  font-weight: 600;
+  fill: var(--muted);
+}
+
+.phase-point {
+  fill: var(--text);
+}
+
+.diagram-note {
+  fill: var(--text);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.region-label {
+  cursor: pointer;
+}
+
+.region-label circle {
+  fill: var(--surface);
+  stroke: var(--primary);
+  stroke-width: 1.5;
+}
+
+.region-label text {
+  fill: var(--primary);
+  font-weight: 800;
+  font-size: 12px;
+}
+
+.region-label.is-selected circle {
+  fill: var(--primary);
+}
+
+.region-label.is-selected text {
+  fill: var(--on-primary);
+}
+
+.region-label.is-correct circle {
   fill: var(--good);
   stroke: var(--good);
-  fill-opacity: 0.25;
-  stroke-opacity: 1;
-  stroke-dasharray: none;
 }
 
-.region.is-wrong rect,
-.region.is-wrong circle {
+.region-label.is-wrong circle {
   fill: var(--bad);
   stroke: var(--bad);
-  fill-opacity: 0.25;
-  stroke-opacity: 1;
-  stroke-dasharray: none;
 }
 
-.region:focus-visible {
+.region-label.is-correct text,
+.region-label.is-wrong text {
+  fill: #fff;
+}
+
+.region-label:focus-visible {
   outline: none;
 }
 
-.region:focus-visible rect,
-.region:focus-visible circle {
-  stroke-width: 3;
-  stroke-opacity: 1;
+.region-label:focus-visible circle {
+  stroke-width: 3.5;
 }
 
-.region-letter {
-  fill: var(--primary);
-  font-weight: 800;
-  font-size: 14px;
+.diagram-title {
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--muted);
+  margin-top: 4px;
 }
 
 .diagram-legend {
