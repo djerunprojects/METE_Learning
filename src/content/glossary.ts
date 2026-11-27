@@ -33,6 +33,9 @@ export const glossary: Record<string, string> = {
 
   // Kinetics and heat treatment
   TTT: 'Time–Temperature–Transformation',
+  GP: 'Guinier–Preston (zones: early solute clusters in aging)',
+  PFZ: 'Precipitate-Free Zone',
+  PH: 'Precipitation-Hardening (as in 17-4 PH stainless steel)',
   CCT: 'Continuous Cooling Transformation',
 
   // Processing
@@ -67,6 +70,9 @@ export const glossary: Record<string, string> = {
   PVC: 'Polyvinyl Chloride',
   PET: 'Polyethylene Terephthalate',
   PMMA: 'Poly(methyl methacrylate)',
+  PTFE: 'Polytetrafluoroethylene (Teflon)',
+  UV: 'Ultraviolet',
+  RTM: 'Resin Transfer Molding',
   PEEK: 'Polyether Ether Ketone',
   PLA: 'Polylactic Acid',
   PGA: 'Polyglycolic Acid',
@@ -89,6 +95,7 @@ export const glossary: Record<string, string> = {
   PV: 'Photovoltaic',
   LED: 'Light-Emitting Diode',
   DC: 'Direct Current',
+  AC: 'Alternating Current',
   MRI: 'Magnetic Resonance Imaging',
   SHE: 'Standard Hydrogen Electrode',
 }

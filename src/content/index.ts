@@ -20,6 +20,10 @@ import { failureQuestions } from './questions/failure'
 import { selectionQuestions } from './questions/selection'
 import { corePlusA } from './questions/core-plus-a'
 import { corePlusB } from './questions/core-plus-b'
+import { discPlusA } from './questions/disc-plus-a'
+import { discPlusB } from './questions/disc-plus-b'
+import { discPlusC } from './questions/disc-plus-c'
+import { discPlusD } from './questions/disc-plus-d'
 
 export { branches, nodes } from './tree'
 export { lessons, lessonList } from './lessons'
@@ -51,4 +55,8 @@ export const questions: Question[] = [
   ...selectionQuestions,
   ...corePlusA,
   ...corePlusB,
+  ...discPlusA,
+  ...discPlusB,
+  ...discPlusC,
+  ...discPlusD,
 ]
