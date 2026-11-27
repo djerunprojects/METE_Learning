@@ -86,6 +86,8 @@ export const glossary: Record<string, string> = {
   CMAS: 'Calcium–Magnesium–Alumino-Silicate (molten sand and ash deposits)',
   RCC: 'Reinforced Carbon–Carbon',
   PICA: 'Phenolic-Impregnated Carbon Ablator',
+  TPS: 'Thermal Protection System',
+  PEM: 'Proton-Exchange Membrane',
   ODS: 'Oxide-Dispersion-Strengthened',
   LFP: 'Lithium Iron Phosphate (LiFePO₄)',
   NMC: 'Lithium Nickel Manganese Cobalt Oxide',

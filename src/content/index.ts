@@ -24,6 +24,8 @@ import { discPlusA } from './questions/disc-plus-a'
 import { discPlusB } from './questions/disc-plus-b'
 import { discPlusC } from './questions/disc-plus-c'
 import { discPlusD } from './questions/disc-plus-d'
+import { appPlusA } from './questions/app-plus-a'
+import { appPlusB } from './questions/app-plus-b'
 
 export { branches, nodes } from './tree'
 export { lessons, lessonList } from './lessons'
@@ -59,4 +61,6 @@ export const questions: Question[] = [
   ...discPlusB,
   ...discPlusC,
   ...discPlusD,
+  ...appPlusA,
+  ...appPlusB,
 ]
