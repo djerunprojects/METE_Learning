@@ -21,6 +21,8 @@ export const glossary: Record<string, string> = {
   BSE: 'Backscattered Electrons',
   EBSD: 'Electron Backscatter Diffraction',
   NA: 'Numerical Aperture',
+  AFM: 'Atomic Force Microscopy',
+  ASTM: 'ASTM International (standards organization; formerly American Society for Testing and Materials)',
 
   // Properties and failure
   UTS: 'Ultimate Tensile Strength',

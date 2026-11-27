@@ -18,6 +18,8 @@ import { aeroQuestions } from './questions/aero'
 import { energyQuestions } from './questions/energy'
 import { failureQuestions } from './questions/failure'
 import { selectionQuestions } from './questions/selection'
+import { corePlusA } from './questions/core-plus-a'
+import { corePlusB } from './questions/core-plus-b'
 
 export { branches, nodes } from './tree'
 export { lessons, lessonList } from './lessons'
@@ -47,4 +49,6 @@ export const questions: Question[] = [
   ...energyQuestions,
   ...failureQuestions,
   ...selectionQuestions,
+  ...corePlusA,
+  ...corePlusB,
 ]

@@ -26,6 +26,7 @@ through a skill tree with XP, player levels and two ranks per node (Learned, Mas
   reasoning, never arithmetic. Every question needs an explanation.
 - Content is based on standard textbooks (Callister & Rethwisch, Askeland, Porter & Easterling, Dieter, Cullity);
   each question file names its sources. Every skill with content needs at least 10 questions.
-  All four layers have content (10 questions per skill); more questions can be added per skill over time.
+  Foundations and Core skills have 20 questions each; Disciplines and Applications have 10+ (being raised to 20).
+  `questions/build.ts` has compact helpers (`forNode(id).mc/tf/tr/ce/mt/pr`) for writing many questions.
 - Content language: English. Style: clean and friendly, accurate to the source material.
 - Run `npm test` after content changes (integrity checks in `src/content/content.test.ts`).

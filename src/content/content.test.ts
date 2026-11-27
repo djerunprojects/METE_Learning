@@ -152,6 +152,14 @@ describe('coverage', () => {
     expect(short).toEqual([])
   })
 
+  it('gives every Foundations and Core skill at least 20 questions', () => {
+    const counts = new Map<string, number>()
+    for (const q of questions) counts.set(q.nodeId, (counts.get(q.nodeId) ?? 0) + 1)
+    const core = new Set(branches.filter((b) => b.layer === 'root' || b.layer === 'core').map((b) => b.id))
+    const short = nodes.filter((n) => core.has(n.branch) && (counts.get(n.id) ?? 0) < 20).map((n) => `${n.id}: ${counts.get(n.id) ?? 0}`)
+    expect(short).toEqual([])
+  })
+
   it('gives every skill in the tree some questions', () => {
     const withQuestions = new Set(questions.map((q) => q.nodeId))
     const missing = nodes.filter((n) => !withQuestions.has(n.id)).map((n) => n.id)
