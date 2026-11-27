@@ -13,6 +13,11 @@ import { polymersLessons } from './polymers'
 import { compositesLessons } from './composites'
 import { corrosionLessons } from './corrosion'
 import { functionalLessons } from './functional'
+import { bioLessons } from './bio'
+import { aeroLessons } from './aero'
+import { energyLessons } from './energy'
+import { failureLessons } from './failure'
+import { selectionLessons } from './selection'
 
 const all: SkillLesson[] = [
   ...foundationsLessons,
@@ -29,6 +34,11 @@ const all: SkillLesson[] = [
   ...compositesLessons,
   ...corrosionLessons,
   ...functionalLessons,
+  ...bioLessons,
+  ...aeroLessons,
+  ...energyLessons,
+  ...failureLessons,
+  ...selectionLessons,
 ]
 
 /** Lessons by skill node id. Add new lesson files above. */

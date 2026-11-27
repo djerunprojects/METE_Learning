@@ -16,7 +16,7 @@ through a skill tree with XP, player levels and two ranks per node (Learned, Mas
     Questions reference formulas by id; every symbol must be described.
   - `glossary.ts`: acronym → full name. Acronyms in any content text get a hover/tap tooltip automatically;
     tests fail if an all-caps acronym is missing from the glossary.
-  - `lessons/*.ts`: 3–5 lesson cards + key points per skill, shown before a skill's first practice
+  - `lessons/*.ts`: 3–5 lesson cards + key points for every skill, shown before a skill's first practice
     (registered in `lessons/index.ts`). Cards may show a formula or diagram; **bold** marks key terms.
   - `types.ts`: the data formats.
 - Game logic lives in `src/game/` (pure, tested): `lesson.ts` (build/grade), `scoring.ts` (XP, ranks),
