@@ -17,6 +17,8 @@ through a skill tree with XP, player levels and two ranks per node (Learned, Mas
   - `glossary.ts`: acronym → full name. Acronyms in any content text get a hover/tap tooltip automatically;
     tests fail if an all-caps acronym is missing from the glossary.
   - `types.ts`: the data formats.
+- Game logic lives in `src/game/` (pure, tested): `lesson.ts` (build/grade), `scoring.ts` (XP, ranks),
+  `unlock.ts` (node status), `levels.ts` (player level curve), `progress.ts` (saved state, streak, import/export).
 - Questions are calculation-free: formulas may be shown, but questions ask about trends and
   reasoning, never arithmetic. Every question needs an explanation.
 - Content language: English. Style: clean and friendly, accurate to the source material.

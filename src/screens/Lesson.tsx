@@ -14,7 +14,8 @@ export function Lesson({
 }: {
   node: SkillNode
   questions: Question[]
-  onFinish: (correct: number) => void
+  /** Called with one entry per question: true when answered correctly. */
+  onFinish: (answers: boolean[]) => void
   onQuit: () => void
 }) {
   const [index, setIndex] = useState(0)
@@ -34,7 +35,7 @@ export function Lesson({
 
   const next = () => {
     if (index + 1 >= questions.length) {
-      onFinish(results.filter(Boolean).length)
+      onFinish(results)
       return
     }
     setIndex(index + 1)

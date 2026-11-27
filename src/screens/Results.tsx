@@ -23,11 +23,14 @@ function rankNote(o: LessonOutcome) {
 export function Results({
   node,
   outcome,
+  levelUp,
   onRetry,
   onHome,
 }: {
   node: SkillNode
   outcome: LessonOutcome
+  /** The new level, when this lesson caused a level up. */
+  levelUp: number | null
   onRetry: () => void
   onHome: () => void
 }) {
@@ -57,6 +60,12 @@ export function Results({
         </div>
       </div>
 
+      {levelUp !== null && (
+        <p className="level-up" role="status">
+          Level up! You reached <strong>level {levelUp}</strong>.
+        </p>
+      )}
+
       <p className="rank-note">{rankNote(outcome)}</p>
 
       <div className="results-actions">
@@ -64,7 +73,7 @@ export function Results({
           Play again
         </button>
         <button type="button" className="primary" onClick={onHome}>
-          Done
+          Back to tree
         </button>
       </div>
     </main>
