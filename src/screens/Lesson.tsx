@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import type { Question, SkillNode } from '../content'
 import { grade } from '../game/lesson'
 import type { Response } from '../game/lesson'
@@ -27,10 +27,19 @@ export function Lesson({
   const isCorrect = checked && response !== null && grade(q, response)
   const done = index + (checked ? 1 : 0)
 
-  const check = () => {
-    if (!response) return
+  // Every type except "select all that apply" is answered by the tap itself.
+  // Matching reports a response only once every pair is made, so it also auto-submits.
+  const submitsOnTap = q.type !== 'cause_effect'
+
+  const check = (r: Response) => {
     setChecked(true)
-    setResults((r) => [...r, grade(q, response)])
+    setResults((prev) => [...prev, grade(q, r)])
+  }
+
+  const answer = (r: Response | null) => {
+    if (checked) return
+    setResponse(r)
+    if (r && submitsOnTap) check(r)
   }
 
   const next = () => {
@@ -70,30 +79,71 @@ export function Lesson({
           <RichText text={q.prompt} />
         </h1>
         {q.formula && <Formula id={q.formula} />}
-        <QuestionView question={q} response={response} onChange={setResponse} checked={checked} />
-      </main>
+        <QuestionView question={q} response={response} onChange={answer} checked={checked} />
 
-      <footer className={`lesson-footer${checked ? (isCorrect ? ' is-correct' : ' is-wrong') : ''}`}>
-        <div className="lesson-footer-inner">
-          {checked && (
-            <div className="feedback" role="status">
-              <div className="feedback-title">{isCorrect ? '✓ Correct!' : '✗ Not quite'}</div>
-              <p className="feedback-text">
-                <RichText text={q.explanation} />
-              </p>
-            </div>
-          )}
-          {checked ? (
-            <button type="button" className="primary" onClick={next} autoFocus>
-              {index + 1 >= questions.length ? 'See results' : 'Continue'}
+        {!checked && !submitsOnTap && (
+          <div className="submit-row">
+            <button type="button" className="primary" onClick={() => response && check(response)} disabled={!response}>
+              Submit
             </button>
-          ) : (
-            <button type="button" className="primary" onClick={check} disabled={!response}>
-              Check
-            </button>
-          )}
-        </div>
-      </footer>
+          </div>
+        )}
+
+        {checked && (
+          <Feedback
+            correct={isCorrect}
+            explanation={q.explanation}
+            last={index + 1 >= questions.length}
+            onNext={next}
+          />
+        )}
+      </main>
+    </div>
+  )
+}
+
+/** Feedback shown right under the options, scrolled into view after answering. */
+function Feedback({
+  correct,
+  explanation,
+  last,
+  onNext,
+}: {
+  correct: boolean
+  explanation: string
+  last: boolean
+  onNext: () => void
+}) {
+  const ref = useRef<HTMLDivElement>(null)
+  const button = useRef<HTMLButtonElement>(null)
+
+  useEffect(() => {
+    button.current?.focus({ preventScroll: true })
+    // Bring the whole card into view with a small margin below it. The layout can still grow
+    // a little right after answering (e.g. the revealed diagram legend), so check again shortly after.
+    const ensureVisible = () => {
+      const el = ref.current
+      if (!el) return
+      const overflow = el.getBoundingClientRect().bottom - (window.innerHeight - 16)
+      if (overflow > 1) window.scrollBy({ top: overflow, behavior: 'smooth' })
+    }
+    const frame = requestAnimationFrame(ensureVisible)
+    const timer = window.setTimeout(ensureVisible, 350)
+    return () => {
+      cancelAnimationFrame(frame)
+      window.clearTimeout(timer)
+    }
+  }, [])
+
+  return (
+    <div ref={ref} className={`feedback ${correct ? 'is-correct' : 'is-wrong'}`} role="status">
+      <div className="feedback-title">{correct ? '✓ Correct!' : '✗ Not quite'}</div>
+      <p className="feedback-text">
+        <RichText text={explanation} />
+      </p>
+      <button ref={button} type="button" className="primary feedback-next" onClick={onNext}>
+        {last ? 'See results' : 'Continue'}
+      </button>
     </div>
   )
 }

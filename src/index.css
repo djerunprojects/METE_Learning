@@ -1396,41 +1396,30 @@ button {
   font-weight: 700;
 }
 
-/* Footer and feedback */
+/* Inline submit and feedback */
 
-.lesson-footer {
-  position: sticky;
-  bottom: 0;
-  border-top: 1px solid var(--border);
-  background: var(--surface);
+.submit-row {
+  margin-top: 14px;
+  display: flex;
+  justify-content: flex-end;
 }
 
-.lesson-footer.is-correct {
+.feedback {
+  margin-top: 16px;
+  padding: 14px 16px;
+  border-radius: var(--radius);
+  border: 2px solid;
+  animation: pop-in 0.18s ease-out;
+}
+
+.feedback.is-correct {
   background: var(--good-soft);
   border-color: var(--good);
 }
 
-.lesson-footer.is-wrong {
+.feedback.is-wrong {
   background: var(--bad-soft);
   border-color: var(--bad);
-}
-
-.lesson-footer-inner {
-  max-width: 720px;
-  margin: 0 auto;
-  padding: 14px 16px calc(14px + env(safe-area-inset-bottom));
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-}
-
-.lesson-footer-inner > .primary:only-child {
-  margin-left: auto;
-}
-
-.feedback {
-  animation: pop-in 0.18s ease-out;
 }
 
 .feedback-title {
@@ -1438,26 +1427,25 @@ button {
   font-size: 1.1rem;
 }
 
-.is-correct .feedback-title {
+.feedback.is-correct .feedback-title {
   color: var(--good);
 }
 
-.is-wrong .feedback-title {
+.feedback.is-wrong .feedback-title {
   color: var(--bad);
 }
 
 .feedback-text {
-  margin: 2px 0 0;
+  margin: 4px 0 12px;
   font-size: 0.95rem;
 }
 
-@media (max-width: 560px) {
-  .lesson-footer-inner {
-    flex-direction: column;
-    align-items: stretch;
-  }
+.feedback-next {
+  width: 100%;
+}
 
-  .lesson-footer-inner .primary {
+@media (max-width: 560px) {
+  .submit-row .primary {
     width: 100%;
   }
 
