@@ -20,6 +20,18 @@ export function buildLesson(nodeId: string, rng: () => number = Math.random): Qu
   ).slice(0, LESSON_LENGTH)
 }
 
+export const REVIEW_LENGTH = 10
+
+/** A review session: up to REVIEW_LENGTH of the most recent mistakes, in random order. */
+export function buildReview(mistakes: string[], rng: () => number = Math.random): Question[] {
+  const byId = new Map(questions.map((q) => [q.id, q]))
+  const recent = [...mistakes].reverse().slice(0, REVIEW_LENGTH)
+  return shuffle(
+    recent.flatMap((id) => (byId.has(id) ? [byId.get(id)!] : [])),
+    rng,
+  )
+}
+
 /** Node ids that have at least one question. */
 export function nodesWithQuestions(): Set<string> {
   return new Set(questions.map((q) => q.nodeId))

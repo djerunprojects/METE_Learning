@@ -7,6 +7,7 @@ import type { Progress } from '../game/progress'
 import { NodeSheet } from '../ui/NodeSheet'
 import { RankPips } from '../ui/RankPips'
 import { RichText } from '../ui/RichText'
+import { ReviewCard } from '../ui/ReviewCard'
 
 const LAYERS: { layer: Layer; title: string; description: string }[] = [
   { layer: 'root', title: 'Foundations', description: 'Every path starts here.' },
@@ -110,12 +111,14 @@ export function TreeScreen({
   saveFailed,
   onStart,
   onRead,
+  onReview,
   onImport,
 }: {
   progress: Progress
   saveFailed: boolean
   onStart: (nodeId: string) => void
   onRead: (nodeId: string) => void
+  onReview: () => void
   onImport: (json: string) => string | null
 }) {
   const [openId, setOpenId] = useState<string | null>(null)
@@ -157,6 +160,7 @@ export function TreeScreen({
             <li><span className="legend-dot is-soon" /> Coming soon</li>
             <li><span className="node-cross">+1</span> Needs a skill from another branch</li>
           </ul>
+          <ReviewCard count={progress.mistakes.length} onReview={onReview} />
           {saveFailed && (
             <p className="warning" role="alert">
               Your browser is blocking storage, so progress won't be saved. Use Export to keep a copy.

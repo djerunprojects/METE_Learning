@@ -20,7 +20,7 @@ through a skill tree with XP, player levels and two ranks per node (Learned, Mas
     (registered in `lessons/index.ts`). Cards may show a formula or diagram; **bold** marks key terms.
   - `types.ts`: the data formats.
 - Game logic lives in `src/game/` (pure, tested): `lesson.ts` (build/grade), `scoring.ts` (XP, ranks),
-  `unlock.ts` (node status), `levels.ts` (player level curve), `progress.ts` (saved state, streak, import/export),
+  `unlock.ts` (node status), `levels.ts` (player level curve), `progress.ts` (saved state, streak, mistakes list, import/export),
   `proficiency.ts` (weighted accuracy over the last 20 answers).
 - Questions are calculation-free: formulas may be shown, but questions ask about trends and
   reasoning, never arithmetic. Every question needs an explanation.

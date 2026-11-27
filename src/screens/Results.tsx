@@ -1,5 +1,5 @@
 import { MASTERY_THRESHOLD, PASS_THRESHOLD } from '../content'
-import type { SkillNode } from '../content'
+import { XP_PER_CORRECT } from '../game/scoring'
 import type { LessonOutcome } from '../game/scoring'
 
 function headline(o: LessonOutcome) {
@@ -21,18 +21,22 @@ function rankNote(o: LessonOutcome) {
 }
 
 export function Results({
-  node,
+  title,
   outcome,
+  note,
   levelUp,
   onRetry,
   onHome,
   homeLabel,
 }: {
-  node: SkillNode
+  title: string
   outcome: LessonOutcome
+  /** Replaces the rank message (used for mistake reviews, which do not change ranks). */
+  note?: string
   /** The new level, when this lesson caused a level up. */
   levelUp: number | null
-  onRetry: () => void
+  /** Omitted when there is nothing left to play again. */
+  onRetry?: () => void
   onHome: () => void
   homeLabel: string
 }) {
@@ -43,7 +47,7 @@ export function Results({
         {h.icon}
       </div>
       <h1>{h.title}</h1>
-      <p className="results-node">{node.title}</p>
+      <p className="results-node">{title}</p>
 
       <div className="stats">
         <div className="stat">
@@ -58,7 +62,7 @@ export function Results({
         </div>
         <div className="stat">
           <div className="stat-value">+{outcome.xp}</div>
-          <div className="stat-label">XP{outcome.perfect ? ' (perfect bonus)' : ''}</div>
+          <div className="stat-label">XP{outcome.xp > outcome.correct * XP_PER_CORRECT ? ' (perfect bonus)' : ''}</div>
         </div>
       </div>
 
@@ -68,12 +72,14 @@ export function Results({
         </p>
       )}
 
-      <p className="rank-note">{rankNote(outcome)}</p>
+      <p className="rank-note">{note ?? rankNote(outcome)}</p>
 
       <div className="results-actions">
-        <button type="button" className="secondary" onClick={onRetry}>
-          Play again
-        </button>
+        {onRetry && (
+          <button type="button" className="secondary" onClick={onRetry}>
+            Play again
+          </button>
+        )}
         <button type="button" className="primary" onClick={onHome}>
           {homeLabel}
         </button>

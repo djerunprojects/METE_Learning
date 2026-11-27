@@ -6,6 +6,7 @@ import { band, proficiency, relativeDay } from '../game/proficiency'
 import type { Progress } from '../game/progress'
 import { RankPips } from '../ui/RankPips'
 import { RichText } from '../ui/RichText'
+import { ReviewCard } from '../ui/ReviewCard'
 
 type Sort = 'branch' | 'weakest' | 'recent'
 
@@ -54,10 +55,12 @@ export function SkillsScreen({
   progress,
   onPractice,
   onRead,
+  onReview,
 }: {
   progress: Progress
   onPractice: (nodeId: string) => void
   onRead: (nodeId: string) => void
+  onReview: () => void
 }) {
   const [sort, setSort] = useState<Sort>(initialSort)
 
@@ -100,6 +103,7 @@ export function SkillsScreen({
     return (
       <main className="skills">
         <h1>My skills</h1>
+        <ReviewCard count={progress.mistakes.length} onReview={onReview} />
         <div className="empty">
           <p>You haven't learned any skills yet.</p>
           <p>Open the skill tree and start with <strong>Classes of Materials</strong>. Skills you learn will show up here with your proficiency.</p>
@@ -114,6 +118,8 @@ export function SkillsScreen({
       <p className="skills-intro">
         Proficiency is your accuracy on a skill's last 20 answers, with recent answers counting more. Practice weak skills to raise it.
       </p>
+
+      <ReviewCard count={progress.mistakes.length} onReview={onReview} />
 
       <section aria-labelledby="branch-overview">
         <h2 id="branch-overview" className="section-title">

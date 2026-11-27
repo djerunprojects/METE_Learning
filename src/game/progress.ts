@@ -1,4 +1,4 @@
-import { MAX_RANK, nodes } from '../content'
+import { MAX_RANK, nodes, questions } from '../content'
 import type { Rank } from '../content'
 import type { LessonOutcome } from './scoring'
 
@@ -12,6 +12,15 @@ export interface Progress {
   /** ISO timestamp of the last lesson per node. */
   lastPlayed: Record<string, string>
   streak: { count: number; lastDay: string | null }
+  /** Ids of questions answered wrong and not yet answered right since, oldest first. */
+  mistakes: string[]
+}
+
+/** One answered question. */
+export interface AnswerRecord {
+  questionId: string
+  nodeId: string
+  correct: boolean
 }
 
 export const RECENT_LIMIT = 20
@@ -24,7 +33,10 @@ export const emptyProgress = (): Progress => ({
   recent: {},
   lastPlayed: {},
   streak: { count: 0, lastDay: null },
+  mistakes: [],
 })
+
+export const MISTAKE_LIMIT = 200
 
 /** Local calendar day, e.g. "2026-11-27". */
 export function dayKey(d: Date): string {
@@ -44,26 +56,60 @@ export function currentStreak(p: Progress, now: Date = new Date()): number {
   return lastDay === dayKey(now) || lastDay === previousDay(now) ? count : 0
 }
 
-/** Records a finished lesson. */
+function bumpStreak(p: Progress, now: Date): Progress['streak'] {
+  const today = dayKey(now)
+  if (p.streak.lastDay === today) return p.streak
+  return { count: p.streak.lastDay === previousDay(now) ? p.streak.count + 1 : 1, lastDay: today }
+}
+
+/** Wrong answers are added to the mistake list; right answers remove them. */
+export function updateMistakes(mistakes: string[], answers: AnswerRecord[]): string[] {
+  let list = [...mistakes]
+  for (const a of answers) {
+    list = list.filter((id) => id !== a.questionId)
+    if (!a.correct) list.push(a.questionId)
+  }
+  return list.slice(-MISTAKE_LIMIT)
+}
+
+/** Records a finished skill lesson (questions of one node). */
 export function applyLesson(
   p: Progress,
   nodeId: string,
   outcome: LessonOutcome,
   answers: boolean[],
   now: Date = new Date(),
+  records: AnswerRecord[] = [],
 ): Progress {
-  const today = dayKey(now)
-  let streak = p.streak
-  if (streak.lastDay !== today) {
-    streak = { count: streak.lastDay === previousDay(now) ? streak.count + 1 : 1, lastDay: today }
-  }
   return {
     ...p,
     xp: p.xp + outcome.xp,
     ranks: { ...p.ranks, [nodeId]: outcome.newRank },
     recent: { ...p.recent, [nodeId]: [...(p.recent[nodeId] ?? []), ...answers].slice(-RECENT_LIMIT) },
     lastPlayed: { ...p.lastPlayed, [nodeId]: now.toISOString() },
-    streak,
+    streak: bumpStreak(p, now),
+    mistakes: updateMistakes(p.mistakes, records),
+  }
+}
+
+/**
+ * Records a finished mistake review: questions from several skills. Adds XP, updates each
+ * skill's recent answers (proficiency) and the mistake list, but never changes ranks.
+ */
+export function applyReview(p: Progress, records: AnswerRecord[], xp: number, now: Date = new Date()): Progress {
+  const recent = { ...p.recent }
+  const lastPlayed = { ...p.lastPlayed }
+  for (const r of records) {
+    recent[r.nodeId] = [...(recent[r.nodeId] ?? []), r.correct].slice(-RECENT_LIMIT)
+    lastPlayed[r.nodeId] = now.toISOString()
+  }
+  return {
+    ...p,
+    xp: p.xp + xp,
+    recent,
+    lastPlayed,
+    streak: bumpStreak(p, now),
+    mistakes: updateMistakes(p.mistakes, records),
   }
 }
 
@@ -72,6 +118,7 @@ export function applyLesson(
 // ---------------------------------------------------------------------------
 
 const nodeIds = new Set(nodes.map((n) => n.id))
+const questionIds = new Set(questions.map((q) => q.id))
 const isObj = (v: unknown): v is Record<string, unknown> => typeof v === 'object' && v !== null && !Array.isArray(v)
 
 /** Validates and cleans saved data. Throws if it is not METE Learning progress. */
@@ -101,6 +148,11 @@ export function parseProgress(json: string): Progress {
       count: Math.floor(raw.streak.count),
       lastDay: typeof lastDay === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(lastDay) ? lastDay : null,
     }
+  }
+  if (Array.isArray(raw.mistakes)) {
+    p.mistakes = [...new Set(raw.mistakes.filter((id): id is string => typeof id === 'string' && questionIds.has(id)))].slice(
+      -MISTAKE_LIMIT,
+    )
   }
   return p
 }

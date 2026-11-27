@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import type { Question, SkillNode } from '../content'
+import type { Question } from '../content'
 import { grade } from '../game/lesson'
 import type { Response } from '../game/lesson'
 import { Formula } from '../ui/Formula'
@@ -7,12 +7,13 @@ import { QuestionView } from '../ui/QuestionView'
 import { RichText } from '../ui/RichText'
 
 export function Lesson({
-  node,
+  label,
   questions,
   onFinish,
   onQuit,
 }: {
-  node: SkillNode
+  /** Shown above each question: the skill title, or e.g. "Review mistakes". */
+  label: string
   questions: Question[]
   /** Called with one entry per question: true when answered correctly. */
   onFinish: (answers: boolean[]) => void
@@ -74,7 +75,7 @@ export function Lesson({
       </header>
 
       <main className="lesson-body" key={q.id}>
-        <p className="lesson-node">{node.title}</p>
+        <p className="lesson-node">{label}</p>
         <h1 className="prompt">
           <RichText text={q.prompt} />
         </h1>
