@@ -126,7 +126,13 @@ export interface DiagramDef {
   regions: { id: string; label: string }[]
 }
 
-export type DiagramId = 'stress_strain_ductile' | 'binary_eutectic' | 'fe_c_steel' | 'ttt_eutectoid'
+export type DiagramId =
+  | 'stress_strain_ductile'
+  | 'binary_eutectic'
+  | 'fe_c_steel'
+  | 'ttt_eutectoid'
+  | 'aging_curve'
+  | 'polymer_modulus'
 
 // ---------------------------------------------------------------------------
 // Formulas — written once in `formulas.ts` and referenced by id from questions

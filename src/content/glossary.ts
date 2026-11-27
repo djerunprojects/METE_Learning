@@ -35,8 +35,12 @@ export const glossary: Record<string, string> = {
   HAZ: 'Heat-Affected Zone',
   BOF: 'Basic Oxygen Furnace',
   EAF: 'Electric Arc Furnace',
+  DRI: 'Direct Reduced Iron',
+  TIG: 'Tungsten Inert Gas (gas tungsten arc) welding',
+  MIG: 'Metal Inert Gas (gas metal arc) welding',
   HIP: 'Hot Isostatic Pressing',
   LPBF: 'Laser Powder Bed Fusion',
+  AM: 'Additive Manufacturing',
   CVD: 'Chemical Vapor Deposition',
   PVD: 'Physical Vapor Deposition',
 
@@ -49,6 +53,7 @@ export const glossary: Record<string, string> = {
   // Polymers and biomaterials
   PE: 'Polyethylene',
   HDPE: 'High-Density Polyethylene',
+  LDPE: 'Low-Density Polyethylene',
   PP: 'Polypropylene',
   PVC: 'Polyvinyl Chloride',
   PET: 'Polyethylene Terephthalate',
@@ -65,6 +70,10 @@ export const glossary: Record<string, string> = {
   SOFC: 'Solid Oxide Fuel Cell',
   PEMFC: 'Proton-Exchange Membrane Fuel Cell',
   PV: 'Photovoltaic',
+  LED: 'Light-Emitting Diode',
+  DC: 'Direct Current',
+  MRI: 'Magnetic Resonance Imaging',
+  SHE: 'Standard Hydrogen Electrode',
 }
 
 export interface TextSegment {
@@ -89,7 +98,16 @@ export function splitAcronyms(text: string): TextSegment[] {
   return out
 }
 
-/** Finds every all-caps token (2+ letters, optional plural "s") — used by the content tests. */
+/** All-caps words that are chemical formulas, not acronyms (no tooltip, not checked). */
+export const CHEMICAL_FORMULAS = new Set(['CO', 'WC', 'NO', 'HF', 'BN'])
+
+/**
+ * Finds every all-caps token (2+ letters, optional plural "s") that should be in the glossary.
+ * Used by the content tests. Chemical formulas are skipped: tokens followed by a subscript
+ * number (SO₂, CO₂) and the ones listed in CHEMICAL_FORMULAS.
+ */
 export function findCapsTokens(text: string): string[] {
-  return [...text.matchAll(/(?<![A-Za-z0-9])([A-Z]{2,})s?(?![A-Za-z0-9])/g)].map((m) => m[1])
+  return [...text.matchAll(/(?<![A-Za-z0-9])([A-Z]{2,})s?(?![A-Za-z0-9₀-₉])/g)]
+    .map((m) => m[1])
+    .filter((t) => !CHEMICAL_FORMULAS.has(t))
 }

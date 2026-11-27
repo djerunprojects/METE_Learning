@@ -246,9 +246,73 @@ const ttt: DiagramArt = {
   ),
 }
 
+
+// ---------------------------------------------------------------------------
+// Precipitation hardening aging curve, schematic. Hardness vs log(aging time).
+// ---------------------------------------------------------------------------
+
+const AGE = { x0: 50, y0: 230, peakX: 205, peakY: 62 }
+
+const agingCurve: DiagramArt = {
+  viewBox: '0 0 400 270',
+  outlined: true,
+  regions: [
+    { id: 'underaged', d: 'M50 28 H170 V230 H50 Z', label: [110, 22] },
+    { id: 'peak', d: 'M170 28 H240 V230 H170 Z', label: [205, 22] },
+    { id: 'overaged', d: 'M240 28 H375 V230 H240 Z', label: [308, 22] },
+  ],
+  overlay: (
+    <>
+      <line x1={AGE.x0} y1={AGE.y0} x2={385} y2={AGE.y0} className="axis" />
+      <line x1={AGE.x0} y1={AGE.y0} x2={AGE.x0} y2={18} className="axis" />
+      <text x={385} y={252} textAnchor="end" className="axis-label">
+        Aging time (log scale)
+      </text>
+      <text x={18} y={130} textAnchor="middle" className="axis-label" transform="rotate(-90 18 130)">
+        Hardness / strength
+      </text>
+      <path d={`M55 200 C 110 195, 150 70, ${AGE.peakX} ${AGE.peakY} C 255 55, 300 130, 372 165`} className="curve" />
+    </>
+  ),
+}
+
+// ---------------------------------------------------------------------------
+// Modulus vs temperature, amorphous thermoplastic, schematic.
+// ---------------------------------------------------------------------------
+
+const polymerModulus: DiagramArt = {
+  viewBox: '0 0 400 270',
+  outlined: true,
+  regions: [
+    { id: 'glassy', d: 'M50 28 H140 V230 H50 Z', label: [95, 22] },
+    { id: 'transition', d: 'M140 28 H205 V230 H140 Z', label: [172, 22] },
+    { id: 'rubbery', d: 'M205 28 H295 V230 H205 Z', label: [250, 22] },
+    { id: 'viscous', d: 'M295 28 H375 V230 H295 Z', label: [335, 22] },
+  ],
+  overlay: (
+    <>
+      <line x1={50} y1={230} x2={385} y2={230} className="axis" />
+      <line x1={50} y1={230} x2={50} y2={18} className="axis" />
+      <text x={385} y={252} textAnchor="end" className="axis-label">
+        Temperature →
+      </text>
+      <text x={18} y={130} textAnchor="middle" className="axis-label" transform="rotate(-90 18 130)">
+        Modulus (log scale)
+      </text>
+      <path d="M55 60 C 100 62, 130 66, 150 85 C 165 105, 175 165, 205 175 C 240 182, 270 182, 295 186 C 320 192, 345 215, 372 225" className="curve" />
+      <line x1={172} y1={230} x2={172} y2={236} className="axis" />
+      <text x={172} y={247} textAnchor="middle" className="axis-label">
+        Tg
+      </text>
+    </>
+  ),
+}
+
 export const diagramArt: Record<DiagramId, DiagramArt> = {
   stress_strain_ductile: stressStrain,
   binary_eutectic: binaryEutectic,
   fe_c_steel: feC,
   ttt_eutectoid: ttt,
+  aging_curve: agingCurve,
+  polymer_modulus: polymerModulus,
 }

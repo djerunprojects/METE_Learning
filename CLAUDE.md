@@ -24,6 +24,6 @@ through a skill tree with XP, player levels and two ranks per node (Learned, Mas
   reasoning, never arithmetic. Every question needs an explanation.
 - Content is based on standard textbooks (Callister & Rethwisch, Askeland, Porter & Easterling, Dieter, Cullity);
   each question file names its sources. Every skill with content needs at least 10 questions.
-  Content is written layer by layer; the Core layer (root + 5 core branches) is done.
+  Content is written layer by layer; the Core and Discipline layers are done, Applications is next.
 - Content language: English. Style: clean and friendly, accurate to the source material.
 - Run `npm test` after content changes (integrity checks in `src/content/content.test.ts`).

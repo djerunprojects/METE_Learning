@@ -48,4 +48,23 @@ export const diagrams: Record<DiagramId, DiagramDef> = {
       { id: 'martensite', label: 'Martensite (below Mₛ)' },
     ],
   },
+  aging_curve: {
+    id: 'aging_curve',
+    title: 'Precipitation hardening: hardness vs aging time at a fixed aging temperature',
+    regions: [
+      { id: 'underaged', label: 'Underaged' },
+      { id: 'peak', label: 'Peak aged' },
+      { id: 'overaged', label: 'Overaged' },
+    ],
+  },
+  polymer_modulus: {
+    id: 'polymer_modulus',
+    title: 'Modulus vs temperature for an amorphous thermoplastic (schematic)',
+    regions: [
+      { id: 'glassy', label: 'Glassy region' },
+      { id: 'transition', label: 'Glass transition (around Tg)' },
+      { id: 'rubbery', label: 'Rubbery plateau' },
+      { id: 'viscous', label: 'Viscous flow' },
+    ],
+  },
 }
