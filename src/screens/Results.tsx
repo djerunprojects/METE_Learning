@@ -26,6 +26,7 @@ export function Results({
   levelUp,
   onRetry,
   onHome,
+  homeLabel,
 }: {
   node: SkillNode
   outcome: LessonOutcome
@@ -33,6 +34,7 @@ export function Results({
   levelUp: number | null
   onRetry: () => void
   onHome: () => void
+  homeLabel: string
 }) {
   const h = headline(outcome)
   return (
@@ -73,7 +75,7 @@ export function Results({
           Play again
         </button>
         <button type="button" className="primary" onClick={onHome}>
-          Back to tree
+          {homeLabel}
         </button>
       </div>
     </main>

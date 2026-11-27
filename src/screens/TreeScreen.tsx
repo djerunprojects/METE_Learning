@@ -1,7 +1,6 @@
 import { useRef, useState } from 'react'
 import { branches, nodes } from '../content'
 import type { Branch, Layer, Rank, SkillNode } from '../content'
-import { levelInfo } from '../game/levels'
 import { nodesWithQuestions } from '../game/lesson'
 import { nodeStatus, requirements } from '../game/unlock'
 import type { Progress } from '../game/progress'
@@ -108,13 +107,11 @@ function BranchColumn({ branch, ranks, onOpen }: { branch: Branch; ranks: Record
 
 export function TreeScreen({
   progress,
-  streak,
   saveFailed,
   onStart,
   onImport,
 }: {
   progress: Progress
-  streak: number
   saveFailed: boolean
   onStart: (nodeId: string) => void
   onImport: (json: string) => string | null
@@ -122,7 +119,6 @@ export function TreeScreen({
   const [openId, setOpenId] = useState<string | null>(null)
   const [importMsg, setImportMsg] = useState<string | null>(null)
   const fileRef = useRef<HTMLInputElement>(null)
-  const lvl = levelInfo(progress.xp)
   const open = openId ? nodes.find((n) => n.id === openId)! : null
   const learned = nodes.filter((n) => (progress.ranks[n.id] ?? 0) >= 1).length
   const mastered = nodes.filter((n) => (progress.ranks[n.id] ?? 0) >= 2).length
@@ -144,31 +140,7 @@ export function TreeScreen({
   }
 
   return (
-    <div className="tree-screen">
-      <header className="player-bar">
-        <div className="player-bar-inner">
-          <div className="level-badge" aria-label={`Level ${lvl.level}`}>
-            <span className="level-label">LVL</span>
-            {lvl.level}
-          </div>
-          <div className="xp-block">
-            <div className="xp-text">
-              <strong>{progress.xp} XP</strong>
-              <span>
-                {lvl.current}/{lvl.needed} to level {lvl.level + 1}
-              </span>
-            </div>
-            <div className="xp-bar" role="progressbar" aria-valuemin={0} aria-valuemax={lvl.needed} aria-valuenow={lvl.current} aria-label="Progress to next level">
-              <div className="xp-fill" style={{ width: `${(lvl.current / lvl.needed) * 100}%` }} />
-            </div>
-          </div>
-          <div className={`streak${streak > 0 ? ' is-on' : ''}`} aria-label={`${streak} day streak`}>
-            <span aria-hidden="true">▲</span> {streak}
-            <span className="streak-label">day{streak === 1 ? '' : 's'}</span>
-          </div>
-        </div>
-      </header>
-
+    <>
       <main className="tree">
         <div className="tree-intro">
           <h1>METE Skill Tree</h1>
@@ -245,6 +217,6 @@ export function TreeScreen({
           onStart={() => onStart(open.id)}
         />
       )}
-    </div>
+    </>
   )
 }

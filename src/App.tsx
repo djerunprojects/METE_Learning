@@ -9,17 +9,21 @@ import { lessonOutcome } from './game/scoring'
 import type { LessonOutcome } from './game/scoring'
 import { Lesson } from './screens/Lesson'
 import { Results } from './screens/Results'
+import { SkillsScreen } from './screens/SkillsScreen'
 import { TreeScreen } from './screens/TreeScreen'
+import { PlayerBar } from './ui/PlayerBar'
+import type { Tab } from './ui/PlayerBar'
 
 type Screen =
-  | { name: 'tree' }
+  | { name: 'home' }
   | { name: 'lesson'; nodeId: string; questions: Question[]; run: number }
   | { name: 'results'; nodeId: string; outcome: LessonOutcome; levelBefore: number; levelAfter: number }
 
 let runCounter = 0
 
 function App() {
-  const [screen, setScreen] = useState<Screen>({ name: 'tree' })
+  const [screen, setScreen] = useState<Screen>({ name: 'home' })
+  const [tab, setTab] = useState<Tab>('tree')
   const [progress, setProgress] = useState<Progress>(loadProgress)
   const [saveFailed, setSaveFailed] = useState(false)
 
@@ -28,17 +32,23 @@ function App() {
     setSaveFailed(!saveProgress(next))
   }
 
-  // Keep the tree's scroll position when coming back from a lesson.
-  const treeScroll = useRef(0)
+  // Keep the home scroll position when coming back from a lesson.
+  const homeScroll = useRef(0)
   useEffect(() => {
-    window.scrollTo(0, screen.name === 'tree' ? treeScroll.current : 0)
+    window.scrollTo(0, screen.name === 'home' ? homeScroll.current : 0)
   }, [screen])
 
+  const switchTab = (t: Tab) => {
+    homeScroll.current = 0
+    setTab(t)
+    window.scrollTo(0, 0)
+  }
+
   const start = (nodeId: string) => {
-    if (screen.name === 'tree') treeScroll.current = window.scrollY
+    if (screen.name === 'home') homeScroll.current = window.scrollY
     setScreen({ name: 'lesson', nodeId, questions: buildLesson(nodeId), run: ++runCounter })
   }
-  const toTree = () => setScreen({ name: 'tree' })
+  const toHome = () => setScreen({ name: 'home' })
 
   if (screen.name === 'lesson') {
     const node = nodes.find((n) => n.id === screen.nodeId)!
@@ -47,7 +57,7 @@ function App() {
         key={screen.run}
         node={node}
         questions={screen.questions}
-        onQuit={toTree}
+        onQuit={toHome}
         onFinish={(answers) => {
           const correct = answers.filter(Boolean).length
           const outcome = lessonOutcome(correct, answers.length, progress.ranks[node.id] ?? 0)
@@ -73,26 +83,33 @@ function App() {
         outcome={screen.outcome}
         levelUp={screen.levelAfter > screen.levelBefore ? screen.levelAfter : null}
         onRetry={() => start(node.id)}
-        onHome={toTree}
+        onHome={toHome}
+        homeLabel={tab === 'tree' ? 'Back to tree' : 'Back to my skills'}
       />
     )
   }
 
   return (
-    <TreeScreen
-      progress={progress}
-      streak={currentStreak(progress)}
-      saveFailed={saveFailed}
-      onStart={start}
-      onImport={(json) => {
-        try {
-          updateProgress(parseProgress(json))
-          return null
-        } catch (e) {
-          return e instanceof SyntaxError ? 'That file is not valid JSON.' : (e as Error).message
-        }
-      }}
-    />
+    <>
+      <PlayerBar xp={progress.xp} streak={currentStreak(progress)} tab={tab} onTab={switchTab} />
+      {tab === 'tree' ? (
+        <TreeScreen
+          progress={progress}
+          saveFailed={saveFailed}
+          onStart={start}
+          onImport={(json) => {
+            try {
+              updateProgress(parseProgress(json))
+              return null
+            } catch (e) {
+              return e instanceof SyntaxError ? 'That file is not valid JSON.' : (e as Error).message
+            }
+          }}
+        />
+      ) : (
+        <SkillsScreen progress={progress} onPractice={start} />
+      )}
+    </>
   )
 }
 
