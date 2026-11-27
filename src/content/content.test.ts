@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { branches, diagrams, nodes, questions } from './index'
-import type { SkillNode } from './types'
+import { branches, diagrams, findCapsTokens, formulas, glossary, nodes, parseExpression, questions } from './index'
+import type { Question, SkillNode } from './types'
 
 // Integrity checks for the content data. Run with `npm test`.
 
@@ -91,5 +91,55 @@ describe('questions', () => {
           break
       }
     }
+  })
+})
+
+describe('formulas', () => {
+  it('uses matching ids', () => {
+    for (const [key, f] of Object.entries(formulas)) expect(f.id).toBe(key)
+  })
+
+  it('describes every symbol in each expression, and nothing extra', () => {
+    for (const f of Object.values(formulas)) {
+      const used = new Set(parseExpression(f.expression).flatMap((t) => (t.symbol ? [t.symbol] : [])))
+      const defined = new Set(f.symbols.map((s) => s.symbol))
+      expect([...used].filter((s) => !defined.has(s)), `${f.id}: undescribed symbols`).toEqual([])
+      expect([...defined].filter((s) => !used.has(s)), `${f.id}: unused symbols`).toEqual([])
+      for (const s of f.symbols) expect(s.name.trim().length, `${f.id}: ${s.symbol}`).toBeGreaterThan(0)
+    }
+  })
+
+  it('is referenced correctly by questions', () => {
+    for (const q of questions) if (q.formula) expect(Object.keys(formulas), q.id).toContain(q.formula)
+  })
+})
+
+function questionTexts(q: Question): string[] {
+  const texts = [q.prompt, q.explanation]
+  switch (q.type) {
+    case 'multiple_choice':
+      return [...texts, ...q.options]
+    case 'cause_effect':
+      return [...texts, q.scenario, ...q.options]
+    case 'matching':
+      return [...texts, ...q.pairs.flatMap((p) => [p.left, p.right])]
+    case 'trend':
+      return [...texts, q.change, q.target]
+    default:
+      return texts
+  }
+}
+
+describe('glossary', () => {
+  it('defines every acronym used in the content', () => {
+    const texts = [
+      ...branches.flatMap((b) => [b.name, b.description]),
+      ...nodes.flatMap((n) => [n.title, n.summary]),
+      ...questions.flatMap(questionTexts),
+      ...Object.values(diagrams).flatMap((d) => [d.title, ...d.regions.map((r) => r.label)]),
+      ...Object.values(formulas).flatMap((f) => [f.name, ...f.symbols.map((s) => s.name)]),
+    ]
+    const missing = new Set(texts.flatMap(findCapsTokens).filter((t) => !(t in glossary)))
+    expect([...missing]).toEqual([])
   })
 })

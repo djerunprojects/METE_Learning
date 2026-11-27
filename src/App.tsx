@@ -1,30 +1,53 @@
-import { branches, nodes, questions } from './content'
+import { useState } from 'react'
+import { nodes } from './content'
+import type { Question, Rank } from './content'
+import { buildLesson } from './game/lesson'
+import { lessonOutcome } from './game/scoring'
+import type { LessonOutcome } from './game/scoring'
+import { Home } from './screens/Home'
+import { Lesson } from './screens/Lesson'
+import { Results } from './screens/Results'
 
-// Placeholder screen (step 1). The lesson screen arrives in step 2 and the tree screen in step 3.
+type Screen =
+  | { name: 'home' }
+  | { name: 'lesson'; nodeId: string; questions: Question[]; run: number }
+  | { name: 'results'; nodeId: string; outcome: LessonOutcome }
+
+let runCounter = 0
+
+// Progress is held in memory for now; saving to the browser comes in step 3.
 function App() {
-  const layers = ['core', 'discipline', 'application'] as const
-  return (
-    <main style={{ maxWidth: 720, margin: '0 auto', padding: '32px 16px', fontFamily: 'system-ui, sans-serif' }}>
-      <h1>METE Learning</h1>
-      <p>
-        Skill tree: {nodes.length} nodes in {branches.length} branches · {questions.length} sample questions.
-      </p>
-      {layers.map((layer) => (
-        <section key={layer}>
-          <h2 style={{ textTransform: 'capitalize' }}>{layer}</h2>
-          <ul>
-            {branches
-              .filter((b) => b.layer === layer)
-              .map((b) => (
-                <li key={b.id}>
-                  <strong>{b.name}</strong>: {nodes.filter((n) => n.branch === b.id).map((n) => n.title).join(' → ')}
-                </li>
-              ))}
-          </ul>
-        </section>
-      ))}
-    </main>
-  )
+  const [screen, setScreen] = useState<Screen>({ name: 'home' })
+  const [ranks, setRanks] = useState<Record<string, Rank>>({})
+  const [xp, setXp] = useState(0)
+
+  const start = (nodeId: string) => setScreen({ name: 'lesson', nodeId, questions: buildLesson(nodeId), run: ++runCounter })
+  const home = () => setScreen({ name: 'home' })
+
+  if (screen.name === 'lesson') {
+    const node = nodes.find((n) => n.id === screen.nodeId)!
+    return (
+      <Lesson
+        key={screen.run}
+        node={node}
+        questions={screen.questions}
+        onQuit={home}
+        onFinish={(correct) => {
+          const outcome = lessonOutcome(correct, screen.questions.length, ranks[node.id] ?? 0)
+          setRanks((r) => ({ ...r, [node.id]: outcome.newRank }))
+          setXp((x) => x + outcome.xp)
+          setScreen({ name: 'results', nodeId: node.id, outcome })
+        }}
+      />
+    )
+  }
+
+  if (screen.name === 'results') {
+    const node = nodes.find((n) => n.id === screen.nodeId)!
+    return <Results node={node} outcome={screen.outcome} onRetry={() => start(node.id)} onHome={home} />
+  }
+
+  return <Home ranks={ranks} xp={xp} onStart={start} />
 }
 
 export default App

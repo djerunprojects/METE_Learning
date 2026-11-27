@@ -77,7 +77,7 @@ export const nodes: SkillNode[] = [
     { id: 'microstructure-grains', title: 'Microstructure & Grains', summary: 'Grains, phases and how microstructure controls properties.' },
   ]),
   ...chain('thermo', fromRoot, [
-    { id: 'gibbs-energy', title: 'Gibbs Energy & Equilibrium', summary: 'G = H − TS and why systems move toward lower free energy.' },
+    { id: 'gibbs-energy', title: 'Gibbs Energy & Equilibrium', summary: 'G = H − T·S and why systems move toward lower free energy.' },
     { id: 'phase-diagrams', title: 'Phase Diagrams', summary: 'Binary diagrams, phase fields, tie lines and the lever rule.' },
     { id: 'fe-c-diagram', title: 'The Fe–C Diagram', summary: 'Ferrite, austenite, cementite, pearlite and the eutectoid.' },
   ]),

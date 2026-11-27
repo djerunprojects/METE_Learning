@@ -12,6 +12,10 @@ through a skill tree with XP, player levels and two ranks per node (Learned, Mas
   - `tree.ts`: branches and skill nodes with unlock rules (root → core → discipline → application).
   - `questions/*.ts`: questions per node, registered in `src/content/index.ts`.
   - `diagrams.ts`: regions for pick-the-region questions.
+  - `formulas.ts`: formula library (name, expression with `{symbol}` markers, symbol names and units).
+    Questions reference formulas by id; every symbol must be described.
+  - `glossary.ts`: acronym → full name. Acronyms in any content text get a hover/tap tooltip automatically;
+    tests fail if an all-caps acronym is missing from the glossary.
   - `types.ts`: the data formats.
 - Questions are calculation-free: formulas may be shown, but questions ask about trends and
   reasoning, never arithmetic. Every question needs an explanation.

@@ -39,6 +39,9 @@ export interface SkillNode {
 /** Ranks: 0 = not learned, 1 = Learned (passed), 2 = Mastered (passed again at ≥ 80%). */
 export type Rank = 0 | 1 | 2
 export const MAX_RANK: Rank = 2
+/** Minimum accuracy to pass a lesson (earns rank 1). */
+export const PASS_THRESHOLD = 0.6
+/** Minimum accuracy on a replay to master a learned node (earns rank 2). */
 export const MASTERY_THRESHOLD = 0.8
 
 // ---------------------------------------------------------------------------
@@ -51,7 +54,7 @@ interface QuestionBase {
   /** The skill node this question belongs to. */
   nodeId: string
   prompt: string
-  /** Optional formula shown above the question for context (plain text / Unicode). */
+  /** Optional formula shown above the question for context: an id from `formulas.ts`. */
   formula?: string
   /** Shown after answering, right or wrong. Should link back to the concept or formula. */
   explanation: string
@@ -124,3 +127,22 @@ export interface DiagramDef {
 }
 
 export type DiagramId = 'stress_strain_ductile'
+
+// ---------------------------------------------------------------------------
+// Formulas — written once in `formulas.ts` and referenced by id from questions
+// ---------------------------------------------------------------------------
+
+export interface FormulaSymbol {
+  /** Symbol as written in the expression. Use `_` for a subscript, e.g. `σ_y`. */
+  symbol: string
+  name: string
+  unit?: string
+}
+
+export interface FormulaDef {
+  id: string
+  name: string
+  /** Expression with every symbol wrapped in braces, e.g. `{σ} = {E} · {ε}`. */
+  expression: string
+  symbols: FormulaSymbol[]
+}

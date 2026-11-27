@@ -7,7 +7,7 @@ export const stressStrainQuestions: Question[] = [
     nodeId: 'stress-strain',
     type: 'trend',
     prompt: "In the elastic region, stress and strain follow Hooke's law.",
-    formula: 'σ = E · ε',
+    formula: 'hookes-law',
     change: 'the same stress σ is applied to a material with a higher elastic modulus E',
     target: 'the elastic strain ε',
     answer: 'decreases',
